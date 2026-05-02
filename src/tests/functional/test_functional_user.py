@@ -3,6 +3,7 @@ from src.repository.peewee_operation_repository import PeeweeUserRepository
 from src.infrastructure.database import db
 from src.models.peewee_models import UserModel
 
+
 class TestLoginFunctional:
     def setup_method(self):
         self.repository = PeeweeUserRepository(db)
@@ -24,6 +25,7 @@ class TestLoginFunctional:
         token = self.service.login(9999, "12345")
         assert token is None
 
+
 class TestLogoutFunctional:
     def setup_method(self):
         self.repository = PeeweeUserRepository(db)
@@ -36,4 +38,3 @@ class TestLogoutFunctional:
         assert token is not None
         token = self.service.logout()
         assert token is None
- #TODO commande cli à tester

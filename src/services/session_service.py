@@ -3,6 +3,7 @@ from src.security.token_service import load_token, clear_token, decode_token
 import jwt
 from src.security.token_service import generate_token, save_token
 
+
 class SessionService:
     def __init__(self):
         pass
@@ -25,4 +26,3 @@ class SessionService:
         token = self.generate_token(user)
         save_token(token)
         return token
-

@@ -29,20 +29,17 @@ from contextlib import suppress
 import peewee as pw
 from peewee_migrate import Migrator
 
-
 with suppress(ImportError):
     import playhouse.postgres_ext as pw_pext
 
 
 def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
-    migrator.sql('ALTER TABLE event ALTER COLUMN location DROP NOT NULL;')
-    migrator.sql('ALTER TABLE event ALTER COLUMN attendee DROP NOT NULL;')
-    migrator.sql('ALTER TABLE event ALTER COLUMN note DROP NOT NULL;')
-    
+    migrator.sql("ALTER TABLE event ALTER COLUMN location DROP NOT NULL;")
+    migrator.sql("ALTER TABLE event ALTER COLUMN attendee DROP NOT NULL;")
+    migrator.sql("ALTER TABLE event ALTER COLUMN note DROP NOT NULL;")
 
 
 def rollback(migrator: Migrator, database: pw.Database, *, fake=False):
-    migrator.sql('ALTER TABLE event ALTER COLUMN location SET NOT NULL;')
-    migrator.sql('ALTER TABLE event ALTER COLUMN attendee SET NOT NULL;')
-    migrator.sql('ALTER TABLE event ALTER COLUMN note SET NOT NULL;')
-    
+    migrator.sql("ALTER TABLE event ALTER COLUMN location SET NOT NULL;")
+    migrator.sql("ALTER TABLE event ALTER COLUMN attendee SET NOT NULL;")
+    migrator.sql("ALTER TABLE event ALTER COLUMN note SET NOT NULL;")

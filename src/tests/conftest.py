@@ -5,15 +5,18 @@ from src.models.peewee_models import UserModel, ContractModel, EventModel, Custo
 
 MODELS = [EventModel, ContractModel, CustomerModel, UserModel]
 
+
 class FakeAdmin:
     def __init__(self):
         self.id__ = 999
-        self.role = 'management'
+        self.role = "management"
+
 
 class FakeUser:
     def __init__(self, id__, role):
         self.id__ = id__
         self.role = role
+
 
 @pytest.fixture(autouse=True)
 def setup_token():
@@ -22,9 +25,10 @@ def setup_token():
     yield
     clear_token()
 
+
 @pytest.fixture
 def test_db():
-    db.init("database_epic_events_test", user='maxime', host='localhost', port=5432)
+    db.init("database_epic_events_test", user="maxime", host="localhost", port=5432)
     db.connect(reuse_if_open=True)
     db.drop_tables(MODELS, safe=True)
     db.create_tables(MODELS, safe=True)

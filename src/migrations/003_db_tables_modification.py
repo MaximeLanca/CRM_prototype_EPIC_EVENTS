@@ -29,13 +29,17 @@ from contextlib import suppress
 import peewee as pw
 from peewee_migrate import Migrator
 
-
 with suppress(ImportError):
     import playhouse.postgres_ext as pw_pext
 
 
 def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
-    migrator.sql('ALTER TABLE contract RENAME COLUMN total_amount_contact TO total_amount;')
+    migrator.sql(
+        "ALTER TABLE contract RENAME COLUMN total_amount_contact TO total_amount;"
+    )
+
 
 def rollback(migrator: Migrator, database: pw.Database, *, fake=False):
-    migrator.sql('ALTER TABLE contract RENAME COLUMN total_amount TO total_amount_contact;')
+    migrator.sql(
+        "ALTER TABLE contract RENAME COLUMN total_amount TO total_amount_contact;"
+    )

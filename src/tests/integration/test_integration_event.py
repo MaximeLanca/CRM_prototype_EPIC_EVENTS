@@ -4,6 +4,7 @@ from src.infrastructure.database import db
 from src.repository.peewee_operation_repository import PeeweeEventRepository
 from datetime import datetime
 
+
 class TestEventRepositoryIntegration:
 
     def setup_method(self):
@@ -16,7 +17,7 @@ class TestEventRepositoryIntegration:
             total_amount=1000,
             amount_remaining_paid=500,
             customer_informations="client",
-            status="unsigned"
+            status="unsigned",
         )
         event = Event(
             contract=contract.id,
@@ -25,7 +26,7 @@ class TestEventRepositoryIntegration:
             support_contact=user.id,
             location="Paris",
             attendee=10,
-            note="test"
+            note="test",
         )
         result = self.event_repository.create_event(event)
         assert result.id__ is not None  # ← id__ pas id
@@ -37,7 +38,7 @@ class TestEventRepositoryIntegration:
             total_amount=1000,
             amount_remaining_paid=500,
             customer_informations="client",
-            status="unsigned"
+            status="unsigned",
         )
         event = EventModel.create(
             contract=contract.id,
@@ -46,7 +47,7 @@ class TestEventRepositoryIntegration:
             support_contact=user.id,
             location="Paris",
             attendee=10,
-            note="test"
+            note="test",
         )
         self.event_repository.delete_event(event.id)
         deleted = EventModel.get_or_none(EventModel.id == event.id)

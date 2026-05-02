@@ -3,6 +3,7 @@ from src.services.user_service import UserService
 from src.domain.domain_models import User
 from src.security.token_service import generate_token, save_token, clear_token
 
+
 class FakeUserRepository:
     def __init__(self):
         self.users = []
@@ -20,7 +21,9 @@ class FakeUserRepository:
                 return user
         return None
 
-    def update_user_information(self, user_id, name_to_change=None, role_to_change=None):
+    def update_user_information(
+        self, user_id, name_to_change=None, role_to_change=None
+    ):
         user = self.get_user_by_id(user_id)
         if user:
             if name_to_change:
@@ -34,6 +37,7 @@ class FakeUserRepository:
             self.users.remove(user)
             return [user.id__, user.name, user.role]
         return None
+
 
 class TestUserService:
 

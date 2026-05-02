@@ -2,6 +2,7 @@ import pytest
 from src.services.contract_service import ContractService
 from src.domain.domain_models import Contract
 
+
 class FakeContractRepository:
     def __init__(self):
         self.contracts = []
@@ -19,8 +20,15 @@ class FakeContractRepository:
                 return contract
         return None
 
-    def update_contract(self, contract_id, sale_contact=None, total_amount=None,
-                        amount_remaining_paid=None, customer_informations=None, status=None):
+    def update_contract(
+        self,
+        contract_id,
+        sale_contact=None,
+        total_amount=None,
+        amount_remaining_paid=None,
+        customer_informations=None,
+        status=None,
+    ):
         contract = self.get_contract_by_id(contract_id)
         if contract:
             if sale_contact:
@@ -39,6 +47,7 @@ class FakeContractRepository:
 
     def filter_contract(self, status):
         return [c for c in self.contracts if c.status == status]
+
 
 class TestContractService:
 

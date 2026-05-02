@@ -3,6 +3,7 @@ from src.infrastructure.database import db
 from src.repository.peewee_operation_repository import PeeweeUserRepository
 from src.domain.domain_models import User
 
+
 class TestUserRepositoryIntegration:
 
     def setup_method(self):
@@ -17,6 +18,8 @@ class TestUserRepositoryIntegration:
         assert db_user.role == "sales"
 
     def test_get_user_by_id(self):
-        user_created = UserModel.create(name="John", password="hashed_pwd", role="sales")
+        user_created = UserModel.create(
+            name="John", password="hashed_pwd", role="sales"
+        )
         user = self.repository.get_user_by_id(user_created.id)
         assert user.name == "John"

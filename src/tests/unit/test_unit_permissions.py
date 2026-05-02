@@ -2,20 +2,24 @@ import pytest
 from src.services.authorization_service import has_permissions
 from src.security.token_service import generate_token, save_token, clear_token
 
+
 class FakeManagement:
     def __init__(self):
         self.id__ = 1
         self.role = "management"
+
 
 class FakeSales:
     def __init__(self):
         self.id__ = 2
         self.role = "sales"
 
+
 class FakeSupport:
     def __init__(self):
         self.id__ = 3
         self.role = "support"
+
 
 class TestPermissions:
 

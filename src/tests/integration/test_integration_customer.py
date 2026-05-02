@@ -4,6 +4,7 @@ from src.domain.domain_models import Customer
 from src.infrastructure.database import db
 from src.repository.peewee_operation_repository import PeeweeCustomerRepository
 
+
 class TestCustomerRepositoryIntegration:
 
     def setup_method(self):
@@ -17,7 +18,7 @@ class TestCustomerRepositoryIntegration:
             company_name="Corp",
             last_update=datetime.now(),
             sales_contact=None,
-            information="info"
+            information="info",
         )
         self.repository.create_customer(customer)
         assert CustomerModel.select().count() == 1
@@ -29,7 +30,7 @@ class TestCustomerRepositoryIntegration:
             phone="123",
             company_name="Corp",
             last_update=datetime.now(),
-            information="info"
+            information="info",
         )
         self.repository.update_customer(
             customer.id, "NewName", None, None, None, None, None, None
@@ -44,7 +45,7 @@ class TestCustomerRepositoryIntegration:
             phone="123",
             company_name="Corp",
             last_update=datetime.now(),
-            information="info"
+            information="info",
         )
         self.repository.delete_customer(customer.id)
         assert CustomerModel.select().count() == 0

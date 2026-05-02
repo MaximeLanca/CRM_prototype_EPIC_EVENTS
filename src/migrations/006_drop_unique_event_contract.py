@@ -29,17 +29,15 @@ from contextlib import suppress
 import peewee as pw
 from peewee_migrate import Migrator
 
-
 with suppress(ImportError):
     import playhouse.postgres_ext as pw_pext
 
 
 def migrate(migrator, database, **kwargs):
-    migrator.sql(
-        'ALTER TABLE event DROP CONSTRAINT IF EXISTS eventmodel_contract_id;'
-    )
+    migrator.sql("ALTER TABLE event DROP CONSTRAINT IF EXISTS eventmodel_contract_id;")
+
 
 def rollback(migrator, database, **kwargs):
     migrator.sql(
-        'ALTER TABLE event ADD CONSTRAINT eventmodel_contract_id UNIQUE (contract_id);'
+        "ALTER TABLE event ADD CONSTRAINT eventmodel_contract_id UNIQUE (contract_id);"
     )
