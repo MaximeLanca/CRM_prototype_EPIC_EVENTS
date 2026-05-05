@@ -18,7 +18,7 @@ cli_command.cli.add_command(cli_command.filter_contract)
 
 cli_command.cli.add_command(cli_command.create_event)
 cli_command.cli.add_command(cli_command.update_event)
-cli_command.cli.add_command(cli_command.filter_event)
+cli_command.cli.add_command(cli_command.filter_event_by_contact)
 cli_command.cli.add_command(cli_command.delete_event)
 cli_command.cli.add_command(cli_command.assign_support_contact)
 

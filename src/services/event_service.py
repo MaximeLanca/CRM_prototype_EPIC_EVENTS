@@ -53,8 +53,8 @@ class EventService:
         )
 
     @require_permission("filter_event")
-    def filter_event(self, support_contact: int):
-        return self.repository.filter_event(support_contact)
+    def filter_event_by_contact(self, support_contact: int) -> list:
+        return self.repository.filter_event_by_contact(support_contact)
 
     @require_permission("delete_event")
     def delete_event(self, event_id: int):

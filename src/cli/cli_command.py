@@ -227,19 +227,20 @@ def update_event(
 
 
 @click.command()
-@click.option("--support_contact", type=str, required=True)
-def filter_event(support_contact):
-    events_list = event_controller.filter_event(support_contact)
+@click.option("--support_contact", type=int, required=True)
+def filter_event_by_contact(support_contact):
+    events_list = event_controller.filter_event_by_contact(support_contact)
     for event in events_list:
         click.echo(
-            f"Event N°{event.event_id},\n"
-            f"Contract N°{event.contract.contract.contract_id},\n"
+            f"Event N°{event.id__},\n"
+            f"Contract N°{event.contract.id__} with status : {event.contract.status},\n"
             f"Date Start: {event.date_start},\n"
             f"Date End: {event.date_end},\n"
-            f"Support Contact: ID N°{event.support_contact.user.user_id},\n"
+            f"Support Contact: ID N°{event.support_contact.id__},\n"
             f"Location: {event.location},\n"
             f"Attendee: {event.attendee},\n"
             f"Note: {event.note}"
+            "\n"
         )
 
 
@@ -261,7 +262,7 @@ def assign_support_contact(event_id, support_contact):
 
 
 @click.command()
-@click.option("--id__", type=int, required=True)
+@click.option("event_id", type=int, required=True)
 def get_event_by_id(event_id):
     event = event_controller.get_event_by_id(event_id)
     click.echo(

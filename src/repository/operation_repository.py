@@ -73,7 +73,7 @@ class EventRepository(ABC):
         pass
 
     @abstractmethod
-    def filter_event(self, support_contact: int) -> list:
+    def filter_event_by_contact(self, support_contact: int) -> list:
         pass
 
     @abstractmethod

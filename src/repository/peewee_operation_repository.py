@@ -8,7 +8,7 @@ from peewee import Database, DoesNotExist
 from src.models.peewee_models import ContractModel, UserModel, EventModel, CustomerModel
 from src.domain.domain_models import User, Contract, Event, Customer
 from datetime import datetime
-
+from src.domain.model_mapper import to_contract, to_customer, to_event, to_user
 
 class PeeweeUserRepository(UserRepository):
     def __init__(self, db: Database):
@@ -24,12 +24,8 @@ class PeeweeUserRepository(UserRepository):
     def get_user_by_id(self, user_id: int) -> object:
         try:
             db_user = UserModel.get(UserModel.id == user_id)
-            return User(
-                id__=db_user.id,
-                name=db_user.name,
-                password=db_user.password,
-                role=db_user.role,
-            )
+            return to_user(db_user)
+            
         except DoesNotExist:
             return None
 
@@ -62,13 +58,7 @@ class PeeweeContractRepository(ContractRepository):
             customer_informations=contract.customer_informations,
             status=contract.status,
         )
-        return Contract(
-            sale_contact=db_contract.sale_contact,
-            total_amount=db_contract.total_amount,
-            amount_remaining_paid=db_contract.amount_remaining_paid,
-            status=db_contract.status,
-            id__=db_contract.id,
-        )
+        return to_contract(db_contract)
 
     def get_contract_by_id(self, contract_id: int) -> object:
         try:
@@ -80,20 +70,10 @@ class PeeweeContractRepository(ContractRepository):
                 .where((UserModel.id == db_contract.sale_contact))
                 .first()
             )
-            print(db_sale_user)
-            sale_user = User(
-                id__=db_sale_user.id,
-                name=db_sale_user.name,
-                password=db_sale_user.password,
-                role=db_sale_user.role,
-            )
-            return Contract(
-                sale_contact=sale_user,
-                total_amount=db_contract.total_amount,
-                amount_remaining_paid=db_contract.amount_remaining_paid,
-                status=db_contract.status,
-                id__=db_contract.id,
-            )
+            sale_user = to_user(db_sale_user)
+
+            return to_contract(db_contract, sale_user)
+               
         except DoesNotExist:
             return None
 
@@ -180,10 +160,22 @@ class PeeweeEventRepository(EventRepository):
             db_event.note = note_to_change
         db_event.save()
 
-    def filter_event(self, support_contact: int) -> list:
-        query = EventModel.select()
-        query = query.where(EventModel.support_contact == support_contact)
-        return list(query)
+    def filter_event_by_contact(self, support_contact: int) -> list:
+        query = EventModel.select().where(EventModel.support_contact == support_contact)
+        events = []
+        for db_event in query:
+
+            db_contract = ContractModel.select().where(ContractModel.id==db_event.contract_id).first()
+            
+            contract = to_contract(db_contract)
+
+            db_user = UserModel.select().where(UserModel.id==db_event.support_contact_id).first()
+            user_contact = to_user(db_user)
+
+            event = to_event(db_event, contract, user_contact)
+            events.append(event)
+        
+        return events
 
     def delete_event(self, event_id: int) -> None:
         try:
@@ -208,6 +200,7 @@ class PeeweeEventRepository(EventRepository):
         db_contract = (
             ContractModel.select().where(ContractModel.id == db_event.contract).first()
         )
+
         contract = Contract(
             sale_contact=db_contract.sale_contact,
             total_amount=db_contract.total_amount,

@@ -45,8 +45,8 @@ class EventController:
             note_to_change,
         )
 
-    def filter_event(self, support_contact: int):
-        return self.service.filter_event(support_contact)
+    def filter_event_by_contact(self, support_contact: int):
+        return self.service.filter_event_by_contact(support_contact)
 
     def delete_event(self, event_id: int):
         return self.service.delete_event(event_id)
