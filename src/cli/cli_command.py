@@ -134,7 +134,7 @@ def update_contract(
     customer_informations_to_change,
     status_to_change,
 ):
-    contract_controller.update_contract(
+    contract = contract_controller.update_contract(
         contract_id,
         sale_contact_to_change,
         total_amount_to_change,
@@ -142,14 +142,17 @@ def update_contract(
         customer_informations_to_change,
         status_to_change,
     )
-    print(f"The contract ID N°{contract_id} is updated.")
+    if contract is None:
+        click.echo("You aren't autorized to modify this contract. You aren't the owner")
+    else:
+        click.echo(f"The contract ID N°{contract_id} is updated.")
 
 
 @cli.command()
 @click.option("--contract_id", type=str, required=True)
 def delete_contract_by_id(contract_id):
     contract_controller.delete_contract_by_id(contract_id)
-    print(f"The contract N°{contract_id} is deleted.")
+    click.echo(f"The contract N°{contract_id} is deleted.")
 
 
 @cli.command()
@@ -171,7 +174,6 @@ def filter_contract(status):
     contract_list = contract_controller.filter_contract(status)
     for contract in contract_list:
         click.echo(f"Contracts N°: {contract.contract_id}")
-
 
 @cli.command()
 @click.option("--contract", type=int, required=True)

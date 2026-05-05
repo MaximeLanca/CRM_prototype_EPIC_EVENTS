@@ -2,6 +2,7 @@ from src.domain.domain_models import Contract
 from src.repository.peewee_operation_repository import PeeweeContractRepository
 from src.services.authorization_service import require_permission
 from src.models.peewee_models import UserModel
+from src.services.session_service import SessionService
 
 
 class ContractService:
@@ -36,6 +37,13 @@ class ContractService:
         customer_informations_to_change: str,
         status_to_change: str,
     ):
+        session = SessionService()
+        payload, _ = session.get_payload()
+        sale_contact_id = int(payload["sub"]) if payload else None 
+
+        contract = self.get_contract_by_id(id__)
+        if sale_contact_id != contract.sale_contact:
+            return None
         return self.repository.update_contract(
             id__,
             sale_contact_to_change,
@@ -49,7 +57,7 @@ class ContractService:
     def delete_contract_by_id(self, id__):
         return self.repository.delete_contract_by_id(id__)
 
-    def get_contract_by_id(self, id__: int) -> object:
+    def get_contract_by_id(self, id__: int) -> Contract:
         return self.repository.get_contract_by_id(id__)
 
     @require_permission("sort_contract")
