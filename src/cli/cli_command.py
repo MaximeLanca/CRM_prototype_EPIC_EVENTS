@@ -261,16 +261,16 @@ def assign_support_contact(event_id, support_contact):
     )
 
 
-@click.command()
-@click.option("event_id", type=int, required=True)
+@cli.command()
+@click.option("--event_id", type=int, required=True)
 def get_event_by_id(event_id):
     event = event_controller.get_event_by_id(event_id)
     click.echo(
         f"Event N°{event.id__},\n"
-        f"Contract N°{event.contract.contract.contract_id},\n"
+        f"Contract N°{event.contract.id__} with status : {event.contract.status},\n"
         f"Date Start: {event.date_start},\n"
         f"Date End: {event.date_end},\n"
-        f"Support Contact: ID N°{event.support_contact.user.user_id},\n"
+        f"Support Contact: ID N°{event.support_contact.id__} / Name : {event.support_contact.name},\n"
         f"Location: {event.location},\n"
         f"Attendee: {event.attendee},\n"
         f"Note: {event.note}"

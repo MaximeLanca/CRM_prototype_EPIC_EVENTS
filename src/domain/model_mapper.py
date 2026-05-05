@@ -1,4 +1,3 @@
-# src/mappers/model_mapper.py
 from src.domain.domain_models import User, Contract, Event, Customer
 from src.models.peewee_models import UserModel, ContractModel, EventModel, CustomerModel
 

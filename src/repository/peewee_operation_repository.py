@@ -32,7 +32,7 @@ class PeeweeUserRepository(UserRepository):
     def update_user_information(
         self, user_id, name_to_change=None, role_to_change=None
     ):
-        db_user = UserModel.get(UserModel.id == user_id)
+        db_user = UserModel.select().where(UserModel.id == user_id)
         if name_to_change is not None:
             db_user.name = name_to_change
         if role_to_change is not None:
@@ -40,7 +40,7 @@ class PeeweeUserRepository(UserRepository):
         db_user.save()
 
     def delete_user_by_id(self, user_id: int) -> list:
-        user_db = UserModel.get(UserModel.id == user_id)
+        user_db = UserModel.select().where(UserModel.id == user_id)
         user_informations = [user_db.id, user_db.name, user_db.role]
         user_db.delete_instance()
         return user_informations
@@ -179,67 +179,44 @@ class PeeweeEventRepository(EventRepository):
 
     def delete_event(self, event_id: int) -> None:
         try:
-            event = EventModel.get(EventModel.id == event_id)
+            event = EventModel.select().where(EventModel.id == event_id)
             event.delete_instance()
         except DoesNotExist:
             pass
 
     def assign_support_contact(self, event_id: int, support_contact: int) -> object:
-        db_user = UserModel.get(UserModel.id == support_contact)
-        support_user = User(
-            id__=db_user.id,
-            name=db_user.name,
-            password=db_user.password,
-            role=db_user.role,
-        )
-
-        db_event = EventModel.get(EventModel.id == event_id)
+        db_event = EventModel.select().where(EventModel.id == event_id).first()
         db_event.support_contact = support_contact
         db_event.save()
 
-        db_contract = (
-            ContractModel.select().where(ContractModel.id == db_event.contract).first()
-        )
+        db_support_user_event = UserModel.select().where(UserModel.id == support_contact).first()
+        user_support_contact_event= to_user(db_support_user_event)
 
-        contract = Contract(
-            sale_contact=db_contract.sale_contact,
-            total_amount=db_contract.total_amount,
-            amount_remaining_paid=db_contract.amount_remaining_paid,
-            status=db_contract.status,
-            created_date=db_contract.created_date,
-            customer_informations=db_contract.customer_informations,
-            id__=db_contract.id,
-        )
-        event = Event(
-            contract=contract,
-            date_start=db_event.date_start,
-            date_end=db_event.date_end,
-            support_contact=support_user,
-            location=db_event.location,
-            attendee=db_event.attendee,
-            note=db_event.note,
-            id__=db_event.id,
-        )
+        db_contract = ContractModel.select().where(ContractModel.id == db_event.contract).first()
+        db_sale_contact_contract = UserModel.select().where(UserModel.id == db_contract.sale_contact).first()
 
-        event.support_contact = support_user
-        event.contract = contract
+        sale_contact_contract = to_user(db_sale_contact_contract)
+        contract = to_contract(db_contract, sale_contact_contract)
+
+        db_event = EventModel.select().where(EventModel.id == event_id).first()
+
+        event = to_event(db_event, contract, user_support_contact_event)
+
         return event
 
     def get_event_by_id(self, event_id) -> object:
-        db_event = EventModel.get(EventModel.id == event_id)
-        contract = ContractModel.get(ContractModel.id == db_event.contract)
-        support_contact = UserModel.get(UserModel.id == db_event.support_contact)
-        return Event(
-            contract=contract,
-            date_start=db_event.date_start,
-            date_end=db_event.date_end,
-            support_contact=support_contact,
-            location=db_event.location,
-            attendee=db_event.attendee,
-            note=db_event.note,
-        )
+        db_event = EventModel.select().where(EventModel.id == event_id).first()
 
+        db_contract = ContractModel.select().where(ContractModel.id == db_event.contract).first()
+        db_sale_contact = UserModel.select().where(UserModel.id == db_contract.sale_contact).first()
+        sale_contact = to_user(db_sale_contact)
+        contract = to_contract(db_contract, sale_contact)
 
+        db_support_contact = UserModel.select().where(UserModel.id == db_event.support_contact).first()
+        support_contact = to_user(db_support_contact)
+
+        return to_event(db_event, contract, support_contact)
+   
 class PeeweeCustomerRepository(CustomerRepository):
     def __init__(self, db: Database):
         self.db = db
