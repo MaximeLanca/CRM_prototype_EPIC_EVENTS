@@ -176,6 +176,28 @@ class PeeweeEventRepository(EventRepository):
             events.append(event)
         
         return events
+    
+    def filter_event_with_or_without_contact(self, assigned_support_contact:bool) -> list:
+        if not assigned_support_contact:
+            query = EventModel.select().where(EventModel.support_contact_id is None)
+        else: 
+            query = EventModel.select().where(EventModel.support_contact_id is not None)
+        
+        events = []
+
+        for db_event in query:
+            db_contract = ContractModel.select().where(ContractModel.id == db_event.contract_id).first()
+            db_sale_contact_contract = UserModel.select().where(UserModel.id == db_contract.sale_contact_id).first()
+            sale_contact_contract = to_user(db_sale_contact_contract)
+            contract = to_contract(db_contract, sale_contact_contract)
+
+            db_support_contact = UserModel.select().where(UserModel.id == db_event.support_contact_id).first()
+            support_contact = to_user(db_support_contact)
+            event = to_event(db_event, contract, support_contact)
+            events.append(event)
+
+        return events
+
 
     def delete_event(self, event_id: int) -> None:
         try:
@@ -228,7 +250,7 @@ class PeeweeCustomerRepository(CustomerRepository):
             phone=customer.phone,
             company_name=customer.company_name,
             last_update=customer.last_update,
-            sales_contact=customer.sales_contact,
+            sale_contact=customer.sale_contact,
             information=customer.information,
         )
         customer.id__ = customer_db.id

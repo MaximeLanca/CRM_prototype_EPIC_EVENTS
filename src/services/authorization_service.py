@@ -21,6 +21,7 @@ PERMISSIONS_BY_ROLE = {
         "assign_support_staff",
         "filter_event",
         "update_event",
+        "filter_event_by_contact",
         "create_employee",
         "update_employee",
         "delete_employee",
@@ -30,7 +31,8 @@ PERMISSIONS_BY_ROLE = {
     ],
     "support": ["filter_event", "update_event"],
 }
-#INfO doit permettre : d’obtenir tous les clients,d’obtenir tous les contrats,d’obtenir tous les événements.
+#TODO doit permettre : d’obtenir tous les clients,d’obtenir tous les contrats,d’obtenir tous les événements.
+
 
 class Unauthenticated(Exception):
     pass

@@ -66,3 +66,7 @@ class EventService:
 
     def get_event_by_id(self, event_id: int) -> object:
         return self.repository.get_event_by_id(event_id)
+
+    @require_permission("filter_event_by_contact")
+    def filter_event_with_or_without_contact(self, assigned_support_contact:bool) -> list:
+        return self.repository.filter_event_with_or_without_contact(assigned_support_contact)

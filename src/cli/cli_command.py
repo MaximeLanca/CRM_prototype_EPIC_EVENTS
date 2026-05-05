@@ -276,6 +276,23 @@ def get_event_by_id(event_id):
         f"Note: {event.note}"
     )
 
+@cli.command()
+@click.option("--assigned_support_contact",type=bool, required=True)
+def filter_event_by_assigned_contact(assigned_support_contact):
+    events_list = event_controller.filter_event_with_or_without_contact(assigned_support_contact)
+    for event in events_list:
+        click.echo(
+        f"Event N°{event.id__},\n"
+        f"Contract N°{event.contract.id__} with status : {event.contract.status},\n"
+        f"Date Start: {event.date_start},\n"
+        f"Date End: {event.date_end},\n"
+        f"Support Contact: ID N°{event.support_contact.id__} / Name : {event.support_contact.name},\n"
+        f"Location: {event.location},\n"
+        f"Attendee: {event.attendee},\n"
+        f"Note: {event.note}"
+        "\n"
+        )
+
 
 # TODO tester fonctionnalités pour event
 
@@ -286,13 +303,12 @@ def get_event_by_id(event_id):
 @click.option("--phone", type=str, required=True)
 @click.option("--company_name", type=str, required=True)
 @click.option("--last_update", type=str, required=False)
-@click.option("--sales_contact", type=int, required=False)
 @click.option("--information", type=str, required=False)
 def create_customer(
-    name, email, phone, company_name, last_update, sales_contact, information
+    name, email, phone, company_name, last_update, information
 ):
     customer = customer_controller.create_customer(
-        name, email, phone, company_name, last_update, sales_contact, information
+        name, email, phone, company_name, last_update, information
     )
     click.echo()
     click.echo(

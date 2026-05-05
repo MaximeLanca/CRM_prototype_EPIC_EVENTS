@@ -1,6 +1,7 @@
 from src.repository.peewee_operation_repository import PeeweeCustomerRepository
 from src.domain.domain_models import Customer
 from src.services.authorization_service import require_permission
+from src.services.session_service import SessionService
 
 
 class CustomerService:
@@ -15,16 +16,19 @@ class CustomerService:
         phone: int,
         company_name: str,
         last_update: str,
-        sales_contact: int,
         information: str,
     ) -> object:
+        session = SessionService()
+        payload, _ = session.get_payload()
+        sale_contact = int(payload["sub"]) if payload else None
+
         customer = Customer(
             name=name,
             email=email,
             phone=phone,
             company_name=company_name,
             last_update=last_update,
-            sales_contact=sales_contact,
+            sale_contact=sale_contact,
             information=information,
         )
         return self.repository.create_customer(customer)

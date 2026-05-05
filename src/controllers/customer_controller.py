@@ -1,12 +1,14 @@
 from src.infrastructure.database import db
 from src.repository.peewee_operation_repository import PeeweeCustomerRepository
 from src.services.customer_service import CustomerService
+from src.services.session_service import SessionService
 
 
 class CustomerController:
     def __init__(self):
         self.repository = PeeweeCustomerRepository(db)
         self.service = CustomerService(self.repository)
+        self.session_service = SessionService()
 
     def create_customer(
         self,
@@ -15,11 +17,10 @@ class CustomerController:
         phone: int,
         company_name: str,
         last_update: str,
-        sales_contact: int,
         information: str,
     ) -> object:
         return self.service.create_customer(
-            name, email, phone, company_name, last_update, sales_contact, information
+            name, email, phone, company_name, last_update, information
         )
 
     def update_customer(

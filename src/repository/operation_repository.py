@@ -85,7 +85,11 @@ class EventRepository(ABC):
         pass
 
     @abstractmethod
-    def get_event_by_id(self, event_id) -> object:
+    def get_event_by_id(self, event_id:int) -> object:
+        pass
+
+    @abstractmethod
+    def filter_event_with_or_without_contact(self, assigned_support_contact:bool) -> list:
         pass
 
 

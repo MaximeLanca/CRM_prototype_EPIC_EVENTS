@@ -54,5 +54,8 @@ class EventController:
     def assign_support_contact(self, event_id: int, support_contact: int):
         return self.service.assign_support_contact(event_id, support_contact)
 
-    def get_event_by_id(self, event_id) -> object:
+    def get_event_by_id(self, event_id:int) -> object:
         return self.service.get_event_by_id(event_id)
+    
+    def filter_event_with_or_without_contact(self,assigned_support_contact:bool) -> list:
+        return self.service.filter_event_with_or_without_contact(assigned_support_contact)

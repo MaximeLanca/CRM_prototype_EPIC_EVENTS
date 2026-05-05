@@ -41,7 +41,7 @@ class Customer:
     phone: int
     company_name: str
     last_update: str
-    sales_contact: int
     information: str
+    sale_contact: Optional[int] = None
     creation_date: datetime = attrs.field(factory=datetime.now)
     id__: Optional[int] = None
