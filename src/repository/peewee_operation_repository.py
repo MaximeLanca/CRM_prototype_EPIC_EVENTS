@@ -61,21 +61,17 @@ class PeeweeContractRepository(ContractRepository):
         return to_contract(db_contract)
 
     def get_contract_by_id(self, contract_id: int) -> object:
-        try:
-            db_contract = (
-                ContractModel.select().where((ContractModel.id == contract_id)).first()
-            )
-            db_sale_user = (
-                UserModel.select()
-                .where((UserModel.id == db_contract.sale_contact))
-                .first()
-            )
-            sale_user = to_user(db_sale_user)
+        db_contract = (
+            ContractModel.select().where((ContractModel.id == contract_id)).first()
+        )
+        db_sale_user = (
+            UserModel.select()
+            .where((UserModel.id == db_contract.sale_contact))
+            .first()
+        )
+        sale_user = to_user(db_sale_user)
 
-            return to_contract(db_contract, sale_user)
-               
-        except DoesNotExist:
-            return None
+        return to_contract(db_contract, sale_user)
 
     def filter_contract(self, status: str) -> list:
         query = ContractModel.select()
@@ -86,6 +82,11 @@ class PeeweeContractRepository(ContractRepository):
         else:
             return []
         return list(query)
+    
+    # def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
+    #     contracts = []
+    #     if is_paid:
+
 
     def delete_contract_by_id(self, contract_id) -> None:
         try:
@@ -102,7 +103,7 @@ class PeeweeContractRepository(ContractRepository):
         amount_remaining_paid_to_change: int,
         customer_informations_to_change: str,
         status_to_change: str,
-    ):
+    ) -> object:
         db_contract = ContractModel.get(ContractModel.id == contract_id)
         if sale_contact_to_change is not None:
             db_contract.sale_contact = sale_contact_to_change
@@ -116,6 +117,9 @@ class PeeweeContractRepository(ContractRepository):
             db_contract.status = status_to_change
         db_contract.save()
 
+        contract = to_contract(db_contract)
+        print(f"DEBUG 3: {contract}")
+        return contract
 
 class PeeweeEventRepository(EventRepository):
     def __init__(self, db: Database):

@@ -29,7 +29,7 @@ class ContractRepository(ABC):
         amount_remaining_paid_to_change: int,
         customer_informations_to_change: str,
         status_to_change: str,
-    ) -> None:
+    ) -> object:
         pass
 
 

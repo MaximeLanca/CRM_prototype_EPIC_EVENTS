@@ -2,6 +2,8 @@ from src.domain.domain_models import User, Contract, Event, Customer
 from src.models.peewee_models import UserModel, ContractModel, EventModel, CustomerModel
 
 def to_user(db_user: UserModel) -> User:
+    if db_user == None:
+        return None
     return User(
         id__=db_user.id,
         name=db_user.name,

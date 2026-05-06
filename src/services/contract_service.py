@@ -30,7 +30,7 @@ class ContractService:
     @require_permission("update_contract")
     def update_contract(
         self,
-        id__: int,
+        contract_id: int,
         sale_contact_to_change: int,
         total_amount_to_change: int,
         amount_remaining_paid_to_change: int,
@@ -39,13 +39,19 @@ class ContractService:
     ):
         session = SessionService()
         payload, _ = session.get_payload()
-        sale_contact_id = int(payload["sub"]) if payload else None 
+        user_id = int(payload["sub"]) if payload else None 
+        user_role = payload.get("role") if payload else None
 
-        contract = self.get_contract_by_id(id__)
-        if sale_contact_id != contract.sale_contact:
+        print(f"DEBUG 1 : {user_id} and {user_role}")
+
+        contract = self.get_contract_by_id(contract_id)
+        print(f"DEBUG 2: {contract}")
+
+        if user_role != "management" and user_id != contract.sale_contact.id__:
             return None
+
         return self.repository.update_contract(
-            id__,
+            contract_id,
             sale_contact_to_change,
             total_amount_to_change,
             amount_remaining_paid_to_change,

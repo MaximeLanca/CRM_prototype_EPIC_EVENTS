@@ -16,8 +16,8 @@ PERMISSIONS_BY_ROLE = {
     "management": [
         "create_contract",
         "delete_contract",
-        "update_contract",
         "sort_contract",
+        "update_contract",
         "assign_support_staff",
         "filter_event",
         "update_event",

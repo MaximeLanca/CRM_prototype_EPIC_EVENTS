@@ -97,14 +97,14 @@ def update_user_information(user_id, name_to_change, role_to_change):
 
 
 @cli.command()
-@click.option("--sale_contact", type=int, required=False)
+@click.option("--sale_contact", type=int, required=True)
 @click.option("--total_amount", type=int, required=True)
 @click.option("--amount_remaining_paid", type=int, required=False)
 @click.option("--customer_informations", type=str, required=False)
 @click.option(
     "--status",
     type=click.Choice(["signed", "unsigned"], case_sensitive=False),
-    required=False,
+    required=True,
 )
 def create_contract(
     sale_contact, total_amount, amount_remaining_paid, customer_informations, status
@@ -133,6 +133,7 @@ def update_contract(
     amount_remaining_paid_to_change,
     customer_informations_to_change,
     status_to_change,
+    #new_zfheizuh
 ):
     contract = contract_controller.update_contract(
         contract_id,
