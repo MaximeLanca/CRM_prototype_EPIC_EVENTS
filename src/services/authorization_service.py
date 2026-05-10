@@ -9,6 +9,7 @@ PERMISSIONS_BY_ROLE = {
         "filter_event",
         "update_contract",
         "sort_contract",
+        "filter_contract",
         "create_customer",
         "update_customer",
         "delete_customer",
@@ -31,7 +32,6 @@ PERMISSIONS_BY_ROLE = {
     ],
     "support": ["filter_event", "update_event"],
 }
-#TODO doit permettre : d’obtenir tous les clients,d’obtenir tous les contrats,d’obtenir tous les événements.
 
 
 class Unauthenticated(Exception):

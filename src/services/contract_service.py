@@ -42,10 +42,7 @@ class ContractService:
         user_id = int(payload["sub"]) if payload else None 
         user_role = payload.get("role") if payload else None
 
-        print(f"DEBUG 1 : {user_id} and {user_role}")
-
         contract = self.get_contract_by_id(contract_id)
-        print(f"DEBUG 2: {contract}")
 
         if user_role != "management" and user_id != contract.sale_contact.id__:
             return None
@@ -69,3 +66,7 @@ class ContractService:
     @require_permission("sort_contract")
     def filter_contract(self, status: str) -> list:
         return self.repository.filter_contract(status)
+    
+    @require_permission("filter_contract")
+    def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
+        return self.repository.filter_contract_by_remaining_paid(is_paid)

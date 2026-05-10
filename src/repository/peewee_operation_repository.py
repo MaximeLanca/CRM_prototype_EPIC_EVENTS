@@ -66,7 +66,7 @@ class PeeweeContractRepository(ContractRepository):
         )
         db_sale_user = (
             UserModel.select()
-            .where((UserModel.id == db_contract.sale_contact))
+            .where(UserModel.id == db_contract.sale_contact)
             .first()
         )
         sale_user = to_user(db_sale_user)
@@ -83,10 +83,20 @@ class PeeweeContractRepository(ContractRepository):
             return []
         return list(query)
     
-    # def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
-    #     contracts = []
-    #     if is_paid:
+    def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
+        contracts = []
+        if is_paid:
+            db_contracts = ContractModel.select().where(ContractModel.amount_remaining_paid == 0)
+        else:
+            db_contracts = ContractModel.select().where(ContractModel.amount_remaining_paid != 0)
 
+        for db_contract in db_contracts:
+            contract = to_contract(db_contract)
+            db_sale_contact = UserModel.select().where(UserModel.id == db_contract.sale_contact.id).first()
+            contract.sale_contact = to_user(db_sale_contact)
+            contracts.append(contract)
+
+        return contracts
 
     def delete_contract_by_id(self, contract_id) -> None:
         try:

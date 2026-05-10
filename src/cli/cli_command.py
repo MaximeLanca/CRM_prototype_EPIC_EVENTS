@@ -177,6 +177,20 @@ def filter_contract(status):
         click.echo(f"Contracts N°: {contract.contract_id}")
 
 @cli.command()
+@click.option("--is_paid", type=bool, required=True)
+def filter_contract_by_remaining_paid(is_paid):
+    contracts = contract_controller.filter_contract_by_remaining_paid(is_paid)
+    for contract in contracts:
+        click.echo(
+        f"Contract N°:{contract.id__}\n"
+        f"Sale contact: {contract.sale_contact.name} & ID number: {contract.sale_contact.id__}\n"
+        f"Total amount: {contract.total_amount}\n"
+        f"Amount remaining paid : {contract.amount_remaining_paid}\n"
+        f"Status: {contract.status}"
+        "\n"
+    )
+
+@cli.command()
 @click.option("--contract", type=int, required=True)
 @click.option("--date_start", type=click.DateTime(formats=["%Y-%m-%d"]), required=True)
 @click.option("--date_end", type=click.DateTime(formats=["%Y-%m-%d"]), required=True)
@@ -245,7 +259,6 @@ def filter_event_by_contact(support_contact):
             f"Note: {event.note}"
             "\n"
         )
-
 
 @click.command()
 @click.option("--event_id", type=int, required=True)

@@ -51,3 +51,6 @@ class ContractController:
 
     def filter_contract(self, status: str) -> list:
         return self.service.filter_contract(status)
+
+    def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
+        return self.service.filter_contract_by_remaining_paid(is_paid)

@@ -31,7 +31,10 @@ class ContractRepository(ABC):
         status_to_change: str,
     ) -> object:
         pass
-
+    
+    @abstractmethod
+    def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
+        pass
 
 class UserRepository(ABC):
     @abstractmethod
