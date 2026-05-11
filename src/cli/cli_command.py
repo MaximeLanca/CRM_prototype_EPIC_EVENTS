@@ -201,10 +201,13 @@ def filter_contract_by_remaining_paid(is_paid):
 def create_event(
     contract, date_start, date_end, support_contact, location, attendee, note
 ):
-    event_controller.create_event(
+    event = event_controller.create_event(
         contract, date_start, date_end, support_contact, location, attendee, note
     )
-    click.echo("The event N° {event.id} id created.")
+    if event:
+        click.echo(f"The event N° {event.id} id created.")
+    else: 
+        click.echo(f"The event didn't has been create because the contract ID N°{contract} didn't has been signed. ")
 
 
 @click.command()

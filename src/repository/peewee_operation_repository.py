@@ -136,17 +136,21 @@ class PeeweeEventRepository(EventRepository):
         self.db = db
 
     def create_event(self, event: Event) -> object:
-        db_event = EventModel.create(
-            contract=event.contract,
-            date_start=event.date_start,
-            date_end=event.date_end,
-            support_contact=event.support_contact,
-            location=event.location,
-            attendee=event.attendee,
-            note=event.note,
-        )
-        event.id__ = db_event.id
-        return event
+        db_contract = ContractModel.select().where(ContractModel.id == event.contract).first()
+        if db_contract.status == "unsigned":
+            return None
+        else:
+            db_event = EventModel.create(
+                contract=event.contract,
+                date_start=event.date_start,
+                date_end=event.date_end,
+                support_contact=event.support_contact,
+                location=event.location,
+                attendee=event.attendee,
+                note=event.note,
+            )
+            event.id__ = db_event.id
+            return event
 
     def update_event(
         self,
