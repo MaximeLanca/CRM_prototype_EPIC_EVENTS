@@ -3,6 +3,7 @@ from datetime import datetime
 from src.models.peewee_models import EventModel
 from src.domain.domain_models import Event
 from src.services.authorization_service import require_permission
+from src.services.session_service import SessionService
 
 
 class EventService:
@@ -53,8 +54,11 @@ class EventService:
         )
 
     @require_permission("filter_event")
-    def filter_event_by_contact(self, support_contact: int) -> list:
-        return self.repository.filter_event_by_contact(support_contact)
+    def filter_my_events(self) -> list:
+        session = SessionService()
+        payload, _ = session.get_payload()
+        user_id = int(payload["sub"]) if payload else None 
+        return self.repository.filter_my_events(user_id)
 
     @require_permission("delete_event")
     def delete_event(self, event_id: int):

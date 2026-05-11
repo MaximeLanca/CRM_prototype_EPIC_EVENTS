@@ -128,7 +128,6 @@ class PeeweeContractRepository(ContractRepository):
         db_contract.save()
 
         contract = to_contract(db_contract)
-        print(f"DEBUG 3: {contract}")
         return contract
 
 class PeeweeEventRepository(EventRepository):
@@ -178,8 +177,8 @@ class PeeweeEventRepository(EventRepository):
             db_event.note = note_to_change
         db_event.save()
 
-    def filter_event_by_contact(self, support_contact: int) -> list:
-        query = EventModel.select().where(EventModel.support_contact == support_contact)
+    def filter_my_events(self, user_id:int) -> list:
+        query = EventModel.select().where(EventModel.support_contact == user_id)
         events = []
         for db_event in query:
 

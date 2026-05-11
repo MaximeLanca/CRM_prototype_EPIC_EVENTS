@@ -247,9 +247,8 @@ def update_event(
 
 
 @click.command()
-@click.option("--support_contact", type=int, required=True)
-def filter_event_by_contact(support_contact):
-    events_list = event_controller.filter_event_by_contact(support_contact)
+def filter_my_events():
+    events_list = event_controller.filter_my_events()
     for event in events_list:
         click.echo(
             f"Event N°{event.id__},\n"
