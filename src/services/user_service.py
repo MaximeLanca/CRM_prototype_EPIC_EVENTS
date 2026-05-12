@@ -11,7 +11,7 @@ class UserService:
         self.repository = PeeweeUserRepository
         self.user_session = SessionService()
 
-    def login(self, user_id: int, password: str):
+    def login(self, user_id: int, password: str) -> tuple [str, object]:
         user = self.get_user_by_id(user_id)
         if not user:
             print("User don't exist.")
@@ -21,7 +21,7 @@ class UserService:
             return None
         token = generate_token(user)
         save_token(token)
-        return token
+        return token, user
 
     def logout(self):
         clear_token()

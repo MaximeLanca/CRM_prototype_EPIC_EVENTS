@@ -11,7 +11,7 @@ class UserController:
     def create_user(self, name: str, password: str, role: str) -> object:
         return self.service.create_user(name, password, role)
 
-    def login(self, user_id: int, password: str):
+    def login(self, user_id: int, password: str) -> tuple [str, object]:
         return self.service.login(user_id, password)
 
     def logout(self):

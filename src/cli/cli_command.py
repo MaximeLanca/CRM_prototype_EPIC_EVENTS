@@ -23,11 +23,11 @@ def cli():
 @click.option("--user_id", required=True, type=int)
 @click.option("--password", required=True)
 def login(user_id, password):
-    token = user_controller.login(user_id, password)
+    token, user = user_controller.login(user_id, password)
     if not token:
         click.echo("Invalid credentials")
     else:
-        click.echo(f"Token: {token}")
+        click.echo(f"Welcome {user.name}.")
 
 
 @click.command()
@@ -310,9 +310,6 @@ def filter_event_by_assigned_contact(assigned_support_contact):
         f"Note: {event.note}"
         "\n"
         )
-
-
-# TODO tester fonctionnalités pour event
 
 
 @click.command()
