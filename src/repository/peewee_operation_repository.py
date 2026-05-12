@@ -139,7 +139,7 @@ class PeeweeEventRepository(EventRepository):
         if db_contract.status == "unsigned":
             return None
         else:
-            db_event = EventModel.create(
+            """ db_event = EventModel.create(
                 contract=event.contract,
                 date_start=event.date_start,
                 date_end=event.date_end,
@@ -147,8 +147,8 @@ class PeeweeEventRepository(EventRepository):
                 location=event.location,
                 attendee=event.attendee,
                 note=event.note,
-            )
-            event.id__ = db_event.id
+            ) """
+            event = to_event(db_contract)
             return event
 
     def update_event(
@@ -216,9 +216,9 @@ class PeeweeEventRepository(EventRepository):
         return events
 
 
-    def delete_event(self, event_id: int) -> None:
+    def delete_event(self, event_id: int):
         try:
-            event = EventModel.select().where(EventModel.id == event_id)
+            event = EventModel.select().where(EventModel.id == event_id).first()
             event.delete_instance()
         except DoesNotExist:
             pass

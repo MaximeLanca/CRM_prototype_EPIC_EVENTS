@@ -22,7 +22,6 @@ def generate_token(user):
         "exp": int((date_now + timedelta(hours=1)).timestamp()),
     }
     token = jwt.encode(payload, JWT_SECRET, algorithm=ALGORITHM)
-    print(f"DEBUG generate type: {type(token)} valeur: {token}")
     return token
 
 
