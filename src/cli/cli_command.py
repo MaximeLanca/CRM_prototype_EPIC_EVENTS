@@ -68,7 +68,7 @@ def check_token():
 def get_user_by_id(user_id):
     user = user_controller.get_user_by_id(user_id)
     click.echo(
-        f"ID number: {user.employee_number}\n"
+        f"ID number: {user.id__}\n"
         f"Name: {user.name}\n"
         f"Role: {user.role}"
     )
