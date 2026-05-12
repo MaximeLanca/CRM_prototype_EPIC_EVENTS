@@ -89,10 +89,10 @@ def delete_user_by_id(user_id):
 
 @click.command()
 @click.option("--user_id", type=int, required=True)
-@click.option("--name_to_change", type=str, required=False)
-@click.option("--role_to_change", type=str, required=False)
-def update_user_information(user_id, name_to_change, role_to_change):
-    user_controller.update_user_information(user_id, name_to_change, role_to_change)
+@click.option("--new_name", type=str, required=False)
+@click.option("--new_role", type=str, required=False)
+def update_user_information(user_id, new_name, new_role):
+    user_controller.update_user_information(user_id, new_name, new_role)
     print("User informations udpated.")
 
 
@@ -117,31 +117,30 @@ def create_contract(
 
 @cli.command()
 @click.option("--contract_id", type=str, required=True)
-@click.option("--sale_contact_to_change", type=int, required=False)
-@click.option("--total_amount_to_change", type=int, required=False)
-@click.option("--amount_remaining_paid_to_change", type=int, required=False)
-@click.option("--customer_informations_to_change", type=str, required=False)
+@click.option("--new_sale_contact", type=int, required=False)
+@click.option("--new_total_amount", type=int, required=False)
+@click.option("--new_amount_remaining_paid", type=int, required=False)
+@click.option("--new_customer_informations", type=str, required=False)
 @click.option(
-    "--status_to_change",
+    "--new_status",
     type=click.Choice(["signed", "unsigned"], case_sensitive=False),
     required=False,
 )
 def update_contract(
     contract_id,
-    sale_contact_to_change,
-    total_amount_to_change,
-    amount_remaining_paid_to_change,
-    customer_informations_to_change,
-    status_to_change,
-    #new_zfheizuh
+    new_sale_contact,
+    new_total_amount,
+    new_amount_remaining_paid,
+    new_customer_informations,
+    new_status,
 ):
     contract = contract_controller.update_contract(
         contract_id,
-        sale_contact_to_change,
-        total_amount_to_change,
-        amount_remaining_paid_to_change,
-        customer_informations_to_change,
-        status_to_change,
+        new_sale_contact,
+        new_total_amount,
+        new_amount_remaining_paid,
+        new_customer_informations,
+        new_status,
     )
     if contract is None:
         click.echo("You aren't autorized to modify this contract. You aren't the owner")
@@ -212,36 +211,36 @@ def create_event(
 
 @click.command()
 @click.option("--event_id", type=str, required=True)
-@click.option("--contract_to_change", type=int, required=False)
+@click.option("--new_contract", type=int, required=False)
 @click.option(
-    "--date_start_to_change", type=click.DateTime(formats=["%Y-%m-%d"]), required=False
+    "--new_date_start", type=click.DateTime(formats=["%Y-%m-%d"]), required=False
 )
 @click.option(
-    "--date_end_to_change", type=click.DateTime(formats=["%Y-%m-%d"]), required=False
+    "--new_date_end", type=click.DateTime(formats=["%Y-%m-%d"]), required=False
 )
-@click.option("--support_contact_to_change", type=int, required=False)
-@click.option("--location_to_change", type=str, required=False)
-@click.option("--attendee_to_change", type=int, required=False)
-@click.option("--note_to_change", type=str, required=False)
+@click.option("--new_support_contact", type=int, required=False)
+@click.option("--new_location", type=str, required=False)
+@click.option("--new_attendee", type=int, required=False)
+@click.option("--new_note", type=str, required=False)
 def update_event(
     event_id,
-    contract_to_change,
-    date_start_to_change,
-    date_end_to_change,
-    support_contact_to_change,
-    location_to_change,
-    attendee_to_change,
-    note_to_change,
+    new_contract,
+    new_date_start,
+    new_date_end,
+    new_support_contact,
+    new_location,
+    new_attendee,
+    new_note,
 ):
     event_controller.update_event(
         event_id,
-        contract_to_change,
-        date_start_to_change,
-        date_end_to_change,
-        support_contact_to_change,
-        location_to_change,
-        attendee_to_change,
-        note_to_change,
+        new_contract,
+        new_date_start,
+        new_date_end,
+        new_support_contact,
+        new_location,
+        new_attendee,
+        new_note,
     )
     click.echo(f"The contract N°{event_id} is updated.")
 
@@ -336,32 +335,32 @@ def create_customer(
 
 @click.command()
 @click.option("--customer_id", type=str, required=True)
-@click.option("--name_to_change", type=str, required=False)
-@click.option("--email_to_change", type=str, required=False)
-@click.option("--phone_to_change", type=str, required=False)
-@click.option("--company_name_to_change", type=str, required=False)
+@click.option("--new_name", type=str, required=False)
+@click.option("--new_email", type=str, required=False)
+@click.option("--new_phone", type=str, required=False)
+@click.option("--new_company_name", type=str, required=False)
 @click.option("--last_update", type=str, required=False)
-@click.option("--sales_contact_to_change", type=int, required=False)
-@click.option("--information_to_change", type=str, required=False)
+@click.option("--new_sales_contact", type=int, required=False)
+@click.option("--new_information", type=str, required=False)
 def update_customer(
     customer_id,
-    name_to_change,
-    email_to_change,
-    phone_to_change,
-    company_name_to_change,
+    new_name,
+    new_email,
+    new_phone,
+    new_company_name,
     last_update,
-    sales_contact_to_change,
-    information_to_change,
+    new_sales_contact,
+    new_information,
 ):
     customer_controller.update_customer(
         customer_id,
-        name_to_change,
-        email_to_change,
-        phone_to_change,
-        company_name_to_change,
+        new_name,
+        new_email,
+        new_phone,
+        new_company_name,
         last_update,
-        sales_contact_to_change,
-        information_to_change,
+        new_sales_contact,
+        new_information,
     )
     click.echo("The customer has been updated.")
 
