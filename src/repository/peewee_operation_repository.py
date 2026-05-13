@@ -159,27 +159,29 @@ class PeeweeEventRepository(EventRepository):
     def update_event(
         self,
         event_id: int,
-        contract_to_change: int,
-        date_start_to_change: datetime,
-        date_end_to_change: datetime,
-        support_contact_to_change: int,
-        location_to_change: str,
-        attendee_to_change: int,
-        note_to_change: str,
+        new_contract: int,
+        new_date_start: datetime,
+        new_date_end: datetime,
+        new_support_contact: int,
+        new_location: str,
+        new_attendee: int,
+        new_note: str,
     ):
         db_event = EventModel.get(EventModel.id == event_id)
-        if contract_to_change is not None:
-            db_event.contract = contract_to_change
-        if date_start_to_change is not None:
-            db_event.date_start = date_end_to_change
-        if date_end_to_change is not None:
-            db_event.date_end = date_end_to_change
-        if support_contact_to_change is not None:
-            db_event.support_contact = support_contact_to_change
-        if location_to_change is not None:
-            db_event.location = location_to_change
-        if attendee_to_change is not None:
-            db_event.note = note_to_change
+        if new_contract is not None:
+            db_event.contract = new_contract
+        if new_date_start is not None:
+            db_event.date_start = new_date_start
+        if new_date_end is not None:
+            db_event.date_end = new_date_end
+        if new_support_contact is not None:
+            db_event.support_contact = new_support_contact
+        if new_location is not None:
+            db_event.location = new_location
+        if new_attendee is not None:
+            db_event.note = new_attendee
+        if new_note is not None:
+            db_event.note = new_note
         db_event.save()
 
     def filter_my_events(self, user_id:int) -> list:

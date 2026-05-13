@@ -26,23 +26,23 @@ class EventController:
     def update_event(
         self,
         event_id: int,
-        contract_to_change: int,
-        date_start_to_change: datetime,
-        date_end_to_change: datetime,
-        support_contact_to_change: int,
-        location_to_change: str,
-        attendee_to_change: int,
-        note_to_change: str,
+        new_contract: int,
+        new_date_start: datetime,
+        new_date_end: datetime,
+        new_support_contact: int,
+        new_location: str,
+        new_attendee: int,
+        new_note: str,
     ):
         return self.service.update_event(
             event_id,
-            contract_to_change,
-            date_start_to_change,
-            date_end_to_change,
-            support_contact_to_change,
-            location_to_change,
-            attendee_to_change,
-            note_to_change,
+            new_contract,
+            new_date_start,
+            new_date_end,
+            new_support_contact,
+            new_location,
+            new_attendee,
+            new_note,
         )
 
     def filter_my_events(self):

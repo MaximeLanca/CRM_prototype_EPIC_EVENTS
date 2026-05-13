@@ -23,10 +23,11 @@ def cli():
 @click.option("--user_id", required=True, type=int)
 @click.option("--password", required=True)
 def login(user_id, password):
-    token, user = user_controller.login(user_id, password)
-    if not token:
-        click.echo("Invalid credentials")
+    result = user_controller.login(user_id, password)
+    if result is None:
+        pass
     else:
+        _, user = result
         click.echo(f"Welcome {user.name}.")
 
 
@@ -207,7 +208,6 @@ def create_event(
         click.echo(f"The event N° {db_event} id created.")
     else: 
         click.echo(f"The event didn't has been create because the contract ID N°{contract} didn't has been signed. ")
-
 
 @click.command()
 @click.option("--event_id", type=str, required=True)

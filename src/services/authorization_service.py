@@ -5,7 +5,6 @@ PERMISSIONS_BY_ROLE = {
     "sales": [
         "create_event",
         "delete_event",
-        "update_event",
         "filter_event",
         "update_contract",
         "sort_contract",
@@ -22,7 +21,6 @@ PERMISSIONS_BY_ROLE = {
         "update_contract",
         "assign_support_staff",
         "filter_event",
-        "update_event",
         "filter_event_by_contact",
         "create_employee",
         "update_employee",

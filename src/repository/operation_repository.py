@@ -24,7 +24,7 @@ class ContractRepository(ABC):
     def update_contract(
         self,
         contract_id: int,
-        sale_contact_to_change: int,
+        sale_contact: int,
         total_amount_to_change: int,
         amount_remaining_paid_to_change: int,
         customer_informations_to_change: str,
@@ -65,13 +65,13 @@ class EventRepository(ABC):
     def update_event(
         self,
         event_id: int,
-        contract_to_change: int,
-        date_start_to_change: datetime,
-        date_end_to_change: datetime,
-        support_contact_to_change: int,
-        location_to_change: str,
-        attendee_to_change: int,
-        note_to_change: str,
+        new_contract: int,
+        new_date_start: datetime,
+        new_date_end: datetime,
+        new_support_contact: int,
+        new_location: str,
+        new_attendee: int,
+        new_note: str,
     ):
         pass
 
