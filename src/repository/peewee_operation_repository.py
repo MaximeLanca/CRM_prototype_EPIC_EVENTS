@@ -32,7 +32,7 @@ class PeeweeUserRepository(UserRepository):
     def update_user_information(
         self, user_id, name_to_change=None, role_to_change=None
     ):
-        db_user = UserModel.select().where(UserModel.id == user_id)
+        db_user = UserModel.select().where(UserModel.id == user_id).first()
         if name_to_change is not None:
             db_user.name = name_to_change
         if role_to_change is not None:
@@ -40,7 +40,7 @@ class PeeweeUserRepository(UserRepository):
         db_user.save()
 
     def delete_user_by_id(self, user_id: int) -> list:
-        user_db = UserModel.select().where(UserModel.id == user_id)
+        user_db = UserModel.select().where(UserModel.id == user_id).first()
         user_informations = [user_db.id, user_db.name, user_db.role]
         user_db.delete_instance()
         return user_informations
@@ -73,15 +73,31 @@ class PeeweeContractRepository(ContractRepository):
 
         return to_contract(db_contract, sale_user)
 
-    def filter_contract(self, status: str) -> list:
-        query = ContractModel.select()
-        if status == "unsigned":
-            query = query.where(ContractModel.status != "signed")
-        elif status == "signed":
-            query = query.where(ContractModel.status != "unsigned")
-        else:
+    def filter_contract(self, status: str, user_id:int, user_role:str) -> list:
+        if status not in ["signed", "unsigned"]:
             return []
+        status_filter = ContractModel.status != ("unsigned" if status == "signed" else "signed")
+
+        query = ContractModel.select().where(status_filter)
+
+        if user_role != "management":
+            query = query.where(ContractModel.sale_contact == user.id)
+            
         return list(query)
+        # query = ContractModel.select()
+        # if status == "unsigned":
+        #     if user_role != "management":
+        #         query = query.select().where((ContractModel.status != "signed" and ContractModel.sale_contact_id == user_id))
+        #     else: 
+        #         query = query.select().where(ContractModel.status != "signed")
+        # elif status == "signed":
+        #     if user_role != "management":
+        #         query = query.select().where(ContractModel.status != "unsigned" and ContractModel.sale_contact_id == user_id)
+        #     else: 
+        #         query = query.select().where(ContractModel.status != "unsigned")
+        # else:
+        #     return []
+        # return list(query)
     
     def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
         contracts = []

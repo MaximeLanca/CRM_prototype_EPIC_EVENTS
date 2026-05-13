@@ -26,3 +26,11 @@ class SessionService:
         token = self.generate_token(user)
         save_token(token)
         return token
+
+    def get_currently_user_id(self):
+        session = SessionService()
+        payload, _ = session.get_payload()
+        user_id = int(payload["sub"]) if payload else None 
+        user_role = payload.get("role") if payload else None
+
+        return user_id, user_role

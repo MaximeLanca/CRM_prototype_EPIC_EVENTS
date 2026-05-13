@@ -173,7 +173,7 @@ def get_contract_by_id(contract_id):
 def filter_contract(status):
     contract_list = contract_controller.filter_contract(status)
     for contract in contract_list:
-        click.echo(f"Contracts N°: {contract.contract_id}")
+        click.echo(f"Contracts N°: {contract.id}")
 
 @cli.command()
 @click.option("--is_paid", type=bool, required=True)

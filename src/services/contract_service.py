@@ -38,10 +38,7 @@ class ContractService:
         status_to_change: str,
     ):
         session = SessionService()
-        payload, _ = session.get_payload()
-        user_id = int(payload["sub"]) if payload else None 
-        user_role = payload.get("role") if payload else None
-
+        user_id, user_role = session.get_currently_user_id()
         contract = self.get_contract_by_id(contract_id)
 
         if user_role != "management" and user_id != contract.sale_contact.id__:
@@ -65,7 +62,9 @@ class ContractService:
 
     @require_permission("sort_contract")
     def filter_contract(self, status: str) -> list:
-        return self.repository.filter_contract(status)
+        session = SessionService()
+        user_id, user_role = session.get_currently_user_id()
+        return self.repository.filter_contract(status, user_id, user_role)
     
     @require_permission("filter_contract")
     def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:

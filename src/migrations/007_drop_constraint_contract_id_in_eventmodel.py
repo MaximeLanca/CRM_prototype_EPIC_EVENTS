@@ -34,9 +34,9 @@ with suppress(ImportError):
     import playhouse.postgres_ext as pw_pext
 
 
-def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
-    migrator.sql('ALTER TABLE event DROP CONSTRAINT eventmodel_contract_id')
-    
+def migrate(migrator, database, **kwargs):
+    database.execute_sql(
+        'ALTER TABLE event DROP CONSTRAINT IF EXISTS eventmodel_contract_id;')
 
 
 def rollback(migrator: Migrator, database: pw.Database, *, fake=False):

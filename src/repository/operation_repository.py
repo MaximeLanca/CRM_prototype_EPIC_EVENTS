@@ -13,7 +13,7 @@ class ContractRepository(ABC):
         pass
 
     @abstractmethod
-    def filter_contract(self, status: str) -> list:
+    def filter_contract(self, status: str, user_id:int, user_role:str) -> list:
         pass
 
     @abstractmethod
