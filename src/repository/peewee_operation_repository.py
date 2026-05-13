@@ -248,19 +248,20 @@ class PeeweeEventRepository(EventRepository):
         db_event = EventModel.select().where(EventModel.id == event_id).first()
 
         event = to_event(db_event, contract, user_support_contact_event)
-
         return event
 
     def get_event_by_id(self, event_id) -> object:
         db_event = EventModel.select().where(EventModel.id == event_id).first()
-
+  
         db_contract = ContractModel.select().where(ContractModel.id == db_event.contract).first()
         db_sale_contact = UserModel.select().where(UserModel.id == db_contract.sale_contact).first()
+
         sale_contact = to_user(db_sale_contact)
         contract = to_contract(db_contract, sale_contact)
 
         db_support_contact = UserModel.select().where(UserModel.id == db_event.support_contact).first()
         support_contact = to_user(db_support_contact)
+        print(f"DEBUG: {support_contact}")
 
         return to_event(db_event, contract, support_contact)
    

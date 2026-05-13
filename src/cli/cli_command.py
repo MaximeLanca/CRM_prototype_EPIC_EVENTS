@@ -277,8 +277,10 @@ def delete_event(event_id):
 @click.option("--support_contact", type=int, required=True)
 def assign_support_contact(event_id, support_contact):
     event = event_controller.assign_support_contact(event_id, support_contact)
+    if event == None:
+        return
     click.echo(
-        f"User ID n°{support_contact} / Name: {event.support_contact.name} has been assigned to the event N°{event.id__}."
+        f"User ID n°{support_contact} / Name: {event.support_contact.name or "Unknown"} has been assigned to the event N°{event.id__}."
     )
 
 
@@ -286,12 +288,16 @@ def assign_support_contact(event_id, support_contact):
 @click.option("--event_id", type=int, required=True)
 def get_event_by_id(event_id):
     event = event_controller.get_event_by_id(event_id)
+    contract_id = event.contract.id__ if event.contract else "Unknown"
+    contract_status = event.contract.status if event.contract else "Unknown"
+    support_id = event.support_contact.id__ if event.support_contact else "Unknown"
+    support_name = event.support_contact.name if event.support_contact else "Unknown"
     click.echo(
         f"Event N°{event.id__},\n"
-        f"Contract N°{event.contract.id__} with status : {event.contract.status},\n"
+        f"Contract N°{contract_id} with status : {contract_status},\n"
         f"Date Start: {event.date_start},\n"
         f"Date End: {event.date_end},\n"
-        f"Support Contact: ID N°{event.support_contact.id__} / Name : {event.support_contact.name},\n"
+        f"Support Contact: ID N°{support_id} / Name : {support_name},\n"
         f"Location: {event.location},\n"
         f"Attendee: {event.attendee},\n"
         f"Note: {event.note}"
