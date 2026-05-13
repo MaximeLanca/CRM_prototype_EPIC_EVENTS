@@ -35,6 +35,7 @@ class EventService:
     @require_permission("update_event")
     def update_event(
         self,
+        event_id:int,
         contract_to_change: int,
         date_start_to_change: datetime,
         date_end_to_change: datetime,
@@ -44,6 +45,7 @@ class EventService:
         note_to_change: str,
     ):
         return self.repository.update_event(
+            event_id,
             contract_to_change,
             date_start_to_change,
             date_end_to_change,
@@ -61,7 +63,7 @@ class EventService:
         return self.repository.filter_my_events(user_id)
 
     @require_permission("delete_event")
-    def delete_event(self, event_id: int):
+    def delete_event(self, event_id: int) -> bool:
         return self.repository.delete_event(event_id)
 
     @require_permission("assign_support_staff")

@@ -48,7 +48,7 @@ class EventController:
     def filter_my_events(self):
         return self.service.filter_my_events()
 
-    def delete_event(self, event_id: int):
+    def delete_event(self, event_id: int) -> bool:
         return self.service.delete_event(event_id)
 
     def assign_support_contact(self, event_id: int, support_contact: int):

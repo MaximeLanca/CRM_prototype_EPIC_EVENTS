@@ -80,7 +80,7 @@ class EventRepository(ABC):
         pass
 
     @abstractmethod
-    def delete_event(self, event_id: int) -> None:
+    def delete_event(self, event_id: int) -> bool:
         pass
 
     @abstractmethod

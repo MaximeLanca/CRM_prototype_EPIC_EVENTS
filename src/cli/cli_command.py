@@ -242,12 +242,14 @@ def update_event(
         new_attendee,
         new_note,
     )
-    click.echo(f"The contract N°{event_id} is updated.")
+    click.echo(f"The event N°{event_id} is updated.")
 
 
 @click.command()
 def filter_my_events():
     events_list = event_controller.filter_my_events()
+    if events_list == []:
+        click.echo("You don't have any associated events.")
     for event in events_list:
         click.echo(
             f"Event N°{event.id__},\n"
@@ -264,7 +266,9 @@ def filter_my_events():
 @click.command()
 @click.option("--event_id", type=int, required=True)
 def delete_event(event_id):
-    event_controller.delete_event(event_id)
+    result = event_controller.delete_event(event_id)
+    if result is None:
+        return
     click.echo(f"Event N°{event_id} is deleted.")
 
 

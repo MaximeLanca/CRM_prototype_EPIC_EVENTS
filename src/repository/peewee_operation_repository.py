@@ -223,10 +223,11 @@ class PeeweeEventRepository(EventRepository):
         return events
 
 
-    def delete_event(self, event_id: int):
+    def delete_event(self, event_id: int) -> bool:
         try:
             event = EventModel.select().where(EventModel.id == event_id).first()
             event.delete_instance()
+            return True
         except DoesNotExist:
             pass
 
