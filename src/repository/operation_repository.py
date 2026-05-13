@@ -33,7 +33,7 @@ class ContractRepository(ABC):
         pass
     
     @abstractmethod
-    def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
+    def filter_contract_by_remaining_paid(self, is_paid:bool, user_id, user_role) -> list:
         pass
 
 class UserRepository(ABC):

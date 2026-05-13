@@ -82,36 +82,26 @@ class PeeweeContractRepository(ContractRepository):
 
         if user_role != "management":
             query = query.where(ContractModel.sale_contact == user.id)
-            
-        return list(query)
-        # query = ContractModel.select()
-        # if status == "unsigned":
-        #     if user_role != "management":
-        #         query = query.select().where((ContractModel.status != "signed" and ContractModel.sale_contact_id == user_id))
-        #     else: 
-        #         query = query.select().where(ContractModel.status != "signed")
-        # elif status == "signed":
-        #     if user_role != "management":
-        #         query = query.select().where(ContractModel.status != "unsigned" and ContractModel.sale_contact_id == user_id)
-        #     else: 
-        #         query = query.select().where(ContractModel.status != "unsigned")
-        # else:
-        #     return []
-        # return list(query)
-    
-    def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
-        contracts = []
-        if is_paid:
-            db_contracts = ContractModel.select().where(ContractModel.amount_remaining_paid == 0)
-        else:
-            db_contracts = ContractModel.select().where(ContractModel.amount_remaining_paid != 0)
 
-        for db_contract in db_contracts:
+        return list(query)
+    
+    
+    def filter_contract_by_remaining_paid(self, is_paid: bool, user_id: int, user_role: str) -> list:
+        paid_filter = ContractModel.amount_remaining_paid == 0 if is_paid else ContractModel.amount_remaining_paid != 0
+        
+        query = ContractModel.select().where(paid_filter)
+        
+        if user_role != "management":
+            query = query.where(ContractModel.sale_contact == user_id)
+        
+        contracts = []
+        for db_contract in query:
             contract = to_contract(db_contract)
-            db_sale_contact = UserModel.select().where(UserModel.id == db_contract.sale_contact.id).first()
+            db_sale_contact = UserModel.select().where(UserModel.id == db_contract.sale_contact_id).first()
             contract.sale_contact = to_user(db_sale_contact)
             contracts.append(contract)
-
+            print( f"DEBUG: {contract}")
+        print( f"DEBUG: {contracts}")
         return contracts
 
     def delete_contract_by_id(self, contract_id) -> None:

@@ -18,6 +18,7 @@ PERMISSIONS_BY_ROLE = {
         "create_contract",
         "delete_contract",
         "sort_contract",
+        "filter_contract",
         "update_contract",
         "assign_support_staff",
         "filter_event",
