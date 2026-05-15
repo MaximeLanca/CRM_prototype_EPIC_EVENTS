@@ -202,10 +202,10 @@ class PeeweeEventRepository(EventRepository):
         return events
     
     def filter_event_with_or_without_contact(self, assigned_support_contact:bool) -> list:
-        if not assigned_support_contact:
-            query = EventModel.select().where(EventModel.support_contact_id is None)
+        if assigned_support_contact is False:
+            query = EventModel.select().where(EventModel.support_contact_id == None)
         else: 
-            query = EventModel.select().where(EventModel.support_contact_id is not None)
+            query = EventModel.select().where(EventModel.support_contact_id != None)
         
         events = []
 

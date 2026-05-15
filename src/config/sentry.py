@@ -6,3 +6,5 @@ sentry_sdk.init(
     # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
     send_default_pii=True,
 )
+
+#TODO toutes les exceptions inattendues ;chaque création/modification d’un collaborateur ;la signature d’un contrat (pour l’option scénarisée).

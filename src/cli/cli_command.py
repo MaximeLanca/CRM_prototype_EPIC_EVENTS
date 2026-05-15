@@ -308,12 +308,17 @@ def get_event_by_id(event_id):
 def filter_event_by_assigned_contact(assigned_support_contact):
     events_list = event_controller.filter_event_with_or_without_contact(assigned_support_contact)
     for event in events_list:
+        contract_id = event.contract.id__ if event.contract else "Unknown"
+        contract_status = event.contract.status if event.contract else "Unknown"
+        support_id = event.support_contact.id__ if event.support_contact else "Unknown"
+        support_name = event.support_contact.name if event.support_contact else "Unknown"
+
         click.echo(
         f"Event N°{event.id__},\n"
-        f"Contract N°{event.contract.id__} with status : {event.contract.status},\n"
+        f"Contract N°{contract_id} with status : {contract_status },\n"
         f"Date Start: {event.date_start},\n"
         f"Date End: {event.date_end},\n"
-        f"Support Contact: ID N°{event.support_contact.id__} / Name : {event.support_contact.name},\n"
+        f"Support Contact: ID N°{support_id} / Name : {support_name},\n"
         f"Location: {event.location},\n"
         f"Attendee: {event.attendee},\n"
         f"Note: {event.note}"
