@@ -8,7 +8,7 @@ from peewee import Database, DoesNotExist
 from src.models.peewee_models import ContractModel, UserModel, EventModel, CustomerModel
 from src.domain.domain_models import User, Contract, Event, Customer
 from datetime import datetime
-from src.domain.model_mapper import to_contract, to_customer, to_event, to_user
+from src.domain.model_mapper import to_contract, to_customer, to_event, to_user, to_customer
 
 class PeeweeUserRepository(UserRepository):
     def __init__(self, db: Database):
@@ -318,14 +318,10 @@ class PeeweeCustomerRepository(CustomerRepository):
             pass
 
     def get_customer_by_id(self, customer_id) -> object:
-        customer_db = CustomerModel.get(CustomerModel.id == customer_id)
-        return Customer(
-            name=customer_db.name,
-            email=customer_db.email,
-            phone=customer_db.phone,
-            company_name=customer_db.company_name,
-            last_update=customer_db.last_update,
-            sales_contact=customer_db.sales_contact,
-            information=customer_db.information,
-            id__=customer_db.id,
-        )
+        customer_db = CustomerModel.select().where(CustomerModel.id == customer_id).first()
+
+        db_sale_contact = UserModel.select().where(UserModel.id == customer_db.sale_contact_id).first()
+        sale_contact = to_user(db_sale_contact)
+        print(f"DEBUG: {sale_contact}")
+        return  to_customer(customer_db, sale_contact)
+   

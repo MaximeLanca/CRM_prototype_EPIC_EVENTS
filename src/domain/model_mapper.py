@@ -34,7 +34,7 @@ def to_event(db_event: EventModel, contract=None, support_contact=None ) -> Even
         note=db_event.note
     )
 
-def to_customer(db_customer: CustomerModel, sales_contact) -> Customer:
+def to_customer(db_customer: CustomerModel, sale_contact) -> Customer:
     return Customer(
         id__=db_customer.id,
         name=db_customer.name,
@@ -42,6 +42,6 @@ def to_customer(db_customer: CustomerModel, sales_contact) -> Customer:
         phone=db_customer.phone,
         company_name=db_customer.company_name,
         last_update=db_customer.last_update,
-        sales_contact=sales_contact,
+        sale_contact=sale_contact,
         information=db_customer.information
     )

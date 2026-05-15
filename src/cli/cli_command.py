@@ -395,9 +395,9 @@ def get_customer_by_id(customer_id):
         f"Customer ID n°{customer.id__},\n"
         f"Name : {customer.name},\n"
         f"Email : {customer.email},\n"
-        f"Phone : {customer.phone}\n,"
+        f"Phone : {customer.phone},\n"
         f"Company name : {customer.company_name},\n"
         f"Last update : {customer.last_update},\n"
-        f"Sale contact : {customer.sales_contact.id__}"
+        f"Sale contact : ID N°{customer.sale_contact.id__} / Name: {customer.sale_contact.name},\n"
         f"Information : {customer.information}"
     )
