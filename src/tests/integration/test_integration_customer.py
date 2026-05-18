@@ -14,10 +14,10 @@ class TestCustomerRepositoryIntegration:
         customer = Customer(
             name="Client",
             email="test@mail.com",
-            phone="123",
+            phone="12345632",
             company_name="Corp",
             last_update=datetime.now(),
-            sales_contact=None,
+            sale_contact=None,
             information="info",
         )
         self.repository.create_customer(customer)

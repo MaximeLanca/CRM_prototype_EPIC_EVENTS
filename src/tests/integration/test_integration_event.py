@@ -17,7 +17,7 @@ class TestEventRepositoryIntegration:
             total_amount=1000,
             amount_remaining_paid=500,
             customer_informations="client",
-            status="unsigned",
+            status="signed",
         )
         event = Event(
             contract=contract.id,
@@ -29,7 +29,7 @@ class TestEventRepositoryIntegration:
             note="test",
         )
         result = self.event_repository.create_event(event)
-        assert result.id__ is not None  # ← id__ pas id
+        assert result.id is not None
 
     def test_delete_event(self):
         user = UserModel.create(name="Support", password="1234", role="support")

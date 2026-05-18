@@ -53,20 +53,20 @@ class TestCustomerService:
 
     def test_create_customer_success(self):
         self.service.create_customer(
-            "Frank", "frank@mail.com", "123", "Corp", None, None, None
+            "Frank", "frank@mail.com", "123", "Corp", None, None,
         )
         assert len(self.repository.customers) == 1
         assert self.repository.customers[0].name == "Frank"
 
     def test_create_customer_has_id(self):
         self.service.create_customer(
-            "Frank", "frank@mail.com", "123", "Corp", None, None, None
+            "Frank", "frank@mail.com", "123", "Corp", None, None
         )
         assert self.repository.customers[0].id__ is not None
 
     def test_get_customer_by_id(self):
         self.service.create_customer(
-            "Frank", "frank@mail.com", "123", "Corp", None, None, None
+            "Frank", "frank@mail.com", "123", "Corp", None, None
         )
         customer = self.repository.customers[0]
         result = self.service.get_customer_by_id(customer.id__)
@@ -79,7 +79,7 @@ class TestCustomerService:
 
     def test_update_customer_name(self):
         self.service.create_customer(
-            "Frank", "frank@mail.com", "123", "Corp", None, None, None
+            "Frank", "frank@mail.com", "123", "Corp", None, None
         )
         customer = self.repository.customers[0]
         self.service.update_customer(
@@ -89,7 +89,7 @@ class TestCustomerService:
 
     def test_delete_customer(self):
         self.service.create_customer(
-            "Frank", "frank@mail.com", "123", "Corp", None, None, None
+            "Frank", "frank@mail.com", "123", "Corp", None, None
         )
         customer = self.repository.customers[0]
         self.service.delete_customer(customer.id__)
