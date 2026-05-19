@@ -93,8 +93,11 @@ def delete_user_by_id(user_id):
 @click.option("--new_name", type=str, required=False)
 @click.option("--new_role", type=str, required=False)
 def update_user_information(user_id, new_name, new_role):
-    user_controller.update_user_information(user_id, new_name, new_role)
-    print("User informations udpated.")
+    result = user_controller.update_user_information(user_id, new_name, new_role)
+    if result:
+        click.echo("No changes provided.")
+    else:
+        click.echo("User informations has been udpated.")
 
 
 @cli.command()

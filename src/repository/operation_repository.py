@@ -24,7 +24,7 @@ class ContractRepository(ABC):
     def update_contract(
         self,
         contract_id: int,
-        sale_contact: int,
+        sale_contact_to_change: int,
         total_amount_to_change: int,
         amount_remaining_paid_to_change: int,
         customer_informations_to_change: str,

@@ -4,6 +4,8 @@ from src.repository.operation_repository import (
     EventRepository,
     CustomerRepository,
 )
+import sentry_sdk
+from datetime import datetime
 from peewee import Database, DoesNotExist
 from src.models.peewee_models import ContractModel, UserModel, EventModel, CustomerModel
 from src.domain.domain_models import User, Contract, Event, Customer
@@ -19,6 +21,8 @@ class PeeweeUserRepository(UserRepository):
             name=user.name, password=user.password, role=user.role
         )
         user.id__ = db_user.id
+        now = datetime.now()
+        sentry_sdk.capture_message(f"The user [ID N° {user.id__}, Name: {user.name}] has been created at {now.strftime("%d/%m/%Y %H:%M:%S")}", level="info")
         return user
 
     def get_user_by_id(self, user_id: int) -> object:
@@ -37,8 +41,14 @@ class PeeweeUserRepository(UserRepository):
             db_user.name = name_to_change
         if role_to_change is not None:
             db_user.role = role_to_change
-        db_user.save()
+        if name_to_change is None and role_to_change is None:
+            return
+        else:
+            now = datetime.now()
+            sentry_sdk.capture_message(f"The user's information [ID N° {db_user.id}, Name: {db_user.name}] has been updated at {now.strftime("%d/%m/%Y %H:%M:%S")}", level="info")
+            db_user.save()
 
+        
     def delete_user_by_id(self, user_id: int) -> list:
         user_db = UserModel.select().where(UserModel.id == user_id).first()
         user_informations = [user_db.id, user_db.name, user_db.role]
@@ -58,7 +68,14 @@ class PeeweeContractRepository(ContractRepository):
             customer_informations=contract.customer_informations,
             status=contract.status,
         )
-        return to_contract(db_contract)
+
+        contract = to_contract(db_contract)
+
+        if contract.status == "signed":
+            now = datetime.now()
+            sentry_sdk.capture_message(f"The contract ID N° {contract.id__} has been signed at {now.strftime("%d/%m/%Y %H:%M:%S")}", level="info")
+
+        return contract
 
     def get_contract_by_id(self, contract_id: int) -> object:
         db_contract = (
@@ -100,8 +117,6 @@ class PeeweeContractRepository(ContractRepository):
             db_sale_contact = UserModel.select().where(UserModel.id == db_contract.sale_contact_id).first()
             contract.sale_contact = to_user(db_sale_contact)
             contracts.append(contract)
-            print( f"DEBUG: {contract}")
-        print( f"DEBUG: {contracts}")
         return contracts
 
     def delete_contract_by_id(self, contract_id) -> None:
@@ -131,9 +146,13 @@ class PeeweeContractRepository(ContractRepository):
             db_contract.customer_informations = customer_informations_to_change
         if status_to_change is not None:
             db_contract.status = status_to_change
+            if status_to_change == "signed":
+                now = datetime.now()
+                sentry_sdk.capture_message(f"Contract N°{contract_id} has been signed at {now.strftime('%d/%m/%Y %H:%M:%S')}",level="info"
         db_contract.save()
 
         contract = to_contract(db_contract)
+
         return contract
 
 class PeeweeEventRepository(EventRepository):
