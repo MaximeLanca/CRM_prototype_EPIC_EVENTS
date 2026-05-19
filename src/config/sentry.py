@@ -1,10 +1,11 @@
 import sentry_sdk
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 sentry_sdk.init(
-    dsn="https://examplePublicKey@o0.ingest.sentry.io/0",
-    # Add request headers and IP for users,
+    dsn= os.environ["DSN_SENTRY"],
+    # Add data like request headers and IP for users,
     # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
     send_default_pii=True,
 )
-
-#TODO toutes les exceptions inattendues ;chaque création/modification d’un collaborateur ;la signature d’un contrat (pour l’option scénarisée).
