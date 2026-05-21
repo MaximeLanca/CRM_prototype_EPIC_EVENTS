@@ -148,7 +148,7 @@ class PeeweeContractRepository(ContractRepository):
             db_contract.status = status_to_change
             if status_to_change == "signed":
                 now = datetime.now()
-                sentry_sdk.capture_message(f"Contract N°{contract_id} has been signed at {now.strftime('%d/%m/%Y %H:%M:%S')}",level="info"
+                sentry_sdk.capture_message(f"Contract N°{contract_id} has been signed at {now.strftime('%d/%m/%Y %H:%M:%S')}",level="info")
         db_contract.save()
 
         contract = to_contract(db_contract)
