@@ -29,13 +29,13 @@ from contextlib import suppress
 import peewee as pw
 from peewee_migrate import Migrator
 
-
 with suppress(ImportError):
     import playhouse.postgres_ext as pw_pext
 
+
 def migrate(migrator: Migrator, database: pw.Database, *, fake=False):
-    migrator.sql('DROP INDEX IF EXISTS eventmodel_contrat_id;')
+    migrator.sql("DROP INDEX IF EXISTS eventmodel_contrat_id;")
+
 
 def rollback(migrator: Migrator, database: pw.Database, *, fake=False):
-    migrator.sql('CREATE UNIQUE INDEX eventmodel_contrat_id ON event (contract_id);')
-    
+    migrator.sql("CREATE UNIQUE INDEX eventmodel_contrat_id ON event (contract_id);")

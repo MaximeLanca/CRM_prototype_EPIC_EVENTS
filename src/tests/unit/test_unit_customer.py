@@ -53,7 +53,12 @@ class TestCustomerService:
 
     def test_create_customer_success(self):
         self.service.create_customer(
-            "Frank", "frank@mail.com", "123", "Corp", None, None,
+            "Frank",
+            "frank@mail.com",
+            "123",
+            "Corp",
+            None,
+            None,
         )
         assert len(self.repository.customers) == 1
         assert self.repository.customers[0].name == "Frank"

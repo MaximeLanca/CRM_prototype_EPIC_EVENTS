@@ -13,7 +13,7 @@ class ContractRepository(ABC):
         pass
 
     @abstractmethod
-    def filter_contract(self, status: str, user_id:int, user_role:str) -> list:
+    def filter_contract(self, status: str, user_id: int, user_role: str) -> list:
         pass
 
     @abstractmethod
@@ -31,10 +31,13 @@ class ContractRepository(ABC):
         status_to_change: str,
     ) -> object:
         pass
-    
+
     @abstractmethod
-    def filter_contract_by_remaining_paid(self, is_paid:bool, user_id, user_role) -> list:
+    def filter_contract_by_remaining_paid(
+        self, is_paid: bool, user_id, user_role
+    ) -> list:
         pass
+
 
 class UserRepository(ABC):
     @abstractmethod
@@ -88,11 +91,13 @@ class EventRepository(ABC):
         pass
 
     @abstractmethod
-    def get_event_by_id(self, event_id:int) -> object:
+    def get_event_by_id(self, event_id: int) -> object:
         pass
 
     @abstractmethod
-    def filter_event_with_or_without_contact(self, assigned_support_contact:bool) -> list:
+    def filter_event_with_or_without_contact(
+        self, assigned_support_contact: bool
+    ) -> list:
         pass
 
 

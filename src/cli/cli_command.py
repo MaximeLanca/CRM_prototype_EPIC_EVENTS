@@ -68,11 +68,7 @@ def check_token():
 @click.option("--user_id", type=int, required=True)
 def get_user_by_id(user_id):
     user = user_controller.get_user_by_id(user_id)
-    click.echo(
-        f"ID number: {user.id__}\n"
-        f"Name: {user.name}\n"
-        f"Role: {user.role}"
-    )
+    click.echo(f"ID number: {user.id__}\n" f"Name: {user.name}\n" f"Role: {user.role}")
 
 
 @click.command()
@@ -179,19 +175,21 @@ def filter_contract(status):
     for contract in contract_list:
         click.echo(f"Contracts N°: {contract.id}")
 
+
 @cli.command()
 @click.option("--is_paid", type=bool, required=True)
 def filter_contract_by_remaining_paid(is_paid):
     contracts = contract_controller.filter_contract_by_remaining_paid(is_paid)
     for contract in contracts:
         click.echo(
-        f"Contract N°:{contract.id__}\n"
-        f"Sale contact: {contract.sale_contact.name} & ID number: {contract.sale_contact.id__}\n"
-        f"Total amount: {contract.total_amount}\n"
-        f"Amount remaining paid : {contract.amount_remaining_paid}\n"
-        f"Status: {contract.status}"
-        "\n"
-    )
+            f"Contract N°:{contract.id__}\n"
+            f"Sale contact: {contract.sale_contact.name} & ID number: {contract.sale_contact.id__}\n"
+            f"Total amount: {contract.total_amount}\n"
+            f"Amount remaining paid : {contract.amount_remaining_paid}\n"
+            f"Status: {contract.status}"
+            "\n"
+        )
+
 
 @cli.command()
 @click.option("--contract", type=int, required=True)
@@ -209,8 +207,11 @@ def create_event(
     )
     if db_event:
         click.echo(f"The event N° {db_event} id created.")
-    else: 
-        click.echo(f"The event didn't has been create because the contract ID N°{contract} didn't has been signed. ")
+    else:
+        click.echo(
+            f"The event didn't has been create because the contract ID N°{contract} didn't has been signed. "
+        )
+
 
 @click.command()
 @click.option("--event_id", type=str, required=True)
@@ -266,6 +267,7 @@ def filter_my_events():
             "\n"
         )
 
+
 @click.command()
 @click.option("--event_id", type=int, required=True)
 def delete_event(event_id):
@@ -306,26 +308,31 @@ def get_event_by_id(event_id):
         f"Note: {event.note}"
     )
 
+
 @cli.command()
-@click.option("--assigned_support_contact",type=bool, required=True)
+@click.option("--assigned_support_contact", type=bool, required=True)
 def filter_event_by_assigned_contact(assigned_support_contact):
-    events_list = event_controller.filter_event_with_or_without_contact(assigned_support_contact)
+    events_list = event_controller.filter_event_with_or_without_contact(
+        assigned_support_contact
+    )
     for event in events_list:
         contract_id = event.contract.id__ if event.contract else "Unknown"
         contract_status = event.contract.status if event.contract else "Unknown"
         support_id = event.support_contact.id__ if event.support_contact else "Unknown"
-        support_name = event.support_contact.name if event.support_contact else "Unknown"
+        support_name = (
+            event.support_contact.name if event.support_contact else "Unknown"
+        )
 
         click.echo(
-        f"Event N°{event.id__},\n"
-        f"Contract N°{contract_id} with status : {contract_status },\n"
-        f"Date Start: {event.date_start},\n"
-        f"Date End: {event.date_end},\n"
-        f"Support Contact: ID N°{support_id} / Name : {support_name},\n"
-        f"Location: {event.location},\n"
-        f"Attendee: {event.attendee},\n"
-        f"Note: {event.note}"
-        "\n"
+            f"Event N°{event.id__},\n"
+            f"Contract N°{contract_id} with status : {contract_status },\n"
+            f"Date Start: {event.date_start},\n"
+            f"Date End: {event.date_end},\n"
+            f"Support Contact: ID N°{support_id} / Name : {support_name},\n"
+            f"Location: {event.location},\n"
+            f"Attendee: {event.attendee},\n"
+            f"Note: {event.note}"
+            "\n"
         )
 
 
@@ -336,9 +343,7 @@ def filter_event_by_assigned_contact(assigned_support_contact):
 @click.option("--company_name", type=str, required=True)
 @click.option("--last_update", type=str, required=False)
 @click.option("--information", type=str, required=False)
-def create_customer(
-    name, email, phone, company_name, last_update, information
-):
+def create_customer(name, email, phone, company_name, last_update, information):
     customer = customer_controller.create_customer(
         name, email, phone, company_name, last_update, information
     )

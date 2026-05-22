@@ -53,7 +53,9 @@ class EventModel(BaseModel):
     class Meta:
         table_name = "event"
 
-    contract = peewee.ForeignKeyField(ContractModel, backref="event",on_delete="CASCADE")
+    contract = peewee.ForeignKeyField(
+        ContractModel, backref="event", on_delete="CASCADE"
+    )
     date_start = peewee.DateField()
     date_end = peewee.DateField()
     support_contact = peewee.ForeignKeyField(UserModel, backref="customers", null=True)

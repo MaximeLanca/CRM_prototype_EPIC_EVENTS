@@ -65,9 +65,11 @@ class ContractService:
         session = SessionService()
         user_id, user_role = session.get_currently_user_id()
         return self.repository.filter_contract(status, user_id, user_role)
-    
+
     @require_permission("filter_contract")
-    def filter_contract_by_remaining_paid(self, is_paid:bool) -> list:
+    def filter_contract_by_remaining_paid(self, is_paid: bool) -> list:
         session = SessionService()
         user_id, user_role = session.get_currently_user_id()
-        return self.repository.filter_contract_by_remaining_paid(is_paid,user_id, user_role)
+        return self.repository.filter_contract_by_remaining_paid(
+            is_paid, user_id, user_role
+        )

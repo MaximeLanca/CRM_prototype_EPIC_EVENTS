@@ -10,7 +10,14 @@ from peewee import Database, DoesNotExist
 from src.models.peewee_models import ContractModel, UserModel, EventModel, CustomerModel
 from src.domain.domain_models import User, Contract, Event, Customer
 from datetime import datetime
-from src.domain.model_mapper import to_contract, to_customer, to_event, to_user, to_customer
+from src.domain.model_mapper import (
+    to_contract,
+    to_customer,
+    to_event,
+    to_user,
+    to_customer,
+)
+
 
 class PeeweeUserRepository(UserRepository):
     def __init__(self, db: Database):
@@ -22,14 +29,17 @@ class PeeweeUserRepository(UserRepository):
         )
         user.id__ = db_user.id
         now = datetime.now()
-        sentry_sdk.capture_message(f"The user [ID N° {user.id__}, Name: {user.name}] has been created at {now.strftime("%d/%m/%Y %H:%M:%S")}", level="info")
+        sentry_sdk.capture_message(
+            f"The user [ID N° {user.id__}, Name: {user.name}] has been created at {now.strftime("%d/%m/%Y %H:%M:%S")}",
+            level="info",
+        )
         return user
 
     def get_user_by_id(self, user_id: int) -> object:
         try:
             db_user = UserModel.get(UserModel.id == user_id)
             return to_user(db_user)
-            
+
         except DoesNotExist:
             return None
 
@@ -45,10 +55,12 @@ class PeeweeUserRepository(UserRepository):
             return
         else:
             now = datetime.now()
-            sentry_sdk.capture_message(f"The user's information [ID N° {db_user.id}, Name: {db_user.name}] has been updated at {now.strftime("%d/%m/%Y %H:%M:%S")}", level="info")
+            sentry_sdk.capture_message(
+                f"The user's information [ID N° {db_user.id}, Name: {db_user.name}] has been updated at {now.strftime("%d/%m/%Y %H:%M:%S")}",
+                level="info",
+            )
             db_user.save()
 
-        
     def delete_user_by_id(self, user_id: int) -> list:
         user_db = UserModel.select().where(UserModel.id == user_id).first()
         user_informations = [user_db.id, user_db.name, user_db.role]
@@ -73,7 +85,10 @@ class PeeweeContractRepository(ContractRepository):
 
         if contract.status == "signed":
             now = datetime.now()
-            sentry_sdk.capture_message(f"The contract ID N° {contract.id__} has been signed at {now.strftime("%d/%m/%Y %H:%M:%S")}", level="info")
+            sentry_sdk.capture_message(
+                f"The contract ID N° {contract.id__} has been signed at {now.strftime("%d/%m/%Y %H:%M:%S")}",
+                level="info",
+            )
 
         return contract
 
@@ -82,18 +97,18 @@ class PeeweeContractRepository(ContractRepository):
             ContractModel.select().where((ContractModel.id == contract_id)).first()
         )
         db_sale_user = (
-            UserModel.select()
-            .where(UserModel.id == db_contract.sale_contact)
-            .first()
+            UserModel.select().where(UserModel.id == db_contract.sale_contact).first()
         )
         sale_user = to_user(db_sale_user)
 
         return to_contract(db_contract, sale_user)
 
-    def filter_contract(self, status: str, user_id:int, user_role:str) -> list:
+    def filter_contract(self, status: str, user_id: int, user_role: str) -> list:
         if status not in ["signed", "unsigned"]:
             return []
-        status_filter = ContractModel.status != ("unsigned" if status == "signed" else "signed")
+        status_filter = ContractModel.status != (
+            "unsigned" if status == "signed" else "signed"
+        )
 
         query = ContractModel.select().where(status_filter)
 
@@ -101,20 +116,29 @@ class PeeweeContractRepository(ContractRepository):
             query = query.where(ContractModel.sale_contact == user.id)
 
         return list(query)
-    
-    
-    def filter_contract_by_remaining_paid(self, is_paid: bool, user_id: int, user_role: str) -> list:
-        paid_filter = ContractModel.amount_remaining_paid == 0 if is_paid else ContractModel.amount_remaining_paid != 0
-        
+
+    def filter_contract_by_remaining_paid(
+        self, is_paid: bool, user_id: int, user_role: str
+    ) -> list:
+        paid_filter = (
+            ContractModel.amount_remaining_paid == 0
+            if is_paid
+            else ContractModel.amount_remaining_paid != 0
+        )
+
         query = ContractModel.select().where(paid_filter)
-        
+
         if user_role != "management":
             query = query.where(ContractModel.sale_contact == user_id)
-        
+
         contracts = []
         for db_contract in query:
             contract = to_contract(db_contract)
-            db_sale_contact = UserModel.select().where(UserModel.id == db_contract.sale_contact_id).first()
+            db_sale_contact = (
+                UserModel.select()
+                .where(UserModel.id == db_contract.sale_contact_id)
+                .first()
+            )
             contract.sale_contact = to_user(db_sale_contact)
             contracts.append(contract)
         return contracts
@@ -148,19 +172,25 @@ class PeeweeContractRepository(ContractRepository):
             db_contract.status = status_to_change
             if status_to_change == "signed":
                 now = datetime.now()
-                sentry_sdk.capture_message(f"Contract N°{contract_id} has been signed at {now.strftime('%d/%m/%Y %H:%M:%S')}",level="info")
+                sentry_sdk.capture_message(
+                    f"Contract N°{contract_id} has been signed at {now.strftime('%d/%m/%Y %H:%M:%S')}",
+                    level="info",
+                )
         db_contract.save()
 
         contract = to_contract(db_contract)
 
         return contract
 
+
 class PeeweeEventRepository(EventRepository):
     def __init__(self, db: Database):
         self.db = db
 
     def create_event(self, event: Event) -> object:
-        db_contract = ContractModel.select().where(ContractModel.id == event.contract).first()
+        db_contract = (
+            ContractModel.select().where(ContractModel.id == event.contract).first()
+        )
         if db_contract.status == "unsigned":
             return None
         else:
@@ -203,44 +233,65 @@ class PeeweeEventRepository(EventRepository):
             db_event.note = new_note
         db_event.save()
 
-    def filter_my_events(self, user_id:int) -> list:
+    def filter_my_events(self, user_id: int) -> list:
         query = EventModel.select().where(EventModel.support_contact == user_id)
         events = []
         for db_event in query:
 
-            db_contract = ContractModel.select().where(ContractModel.id==db_event.contract_id).first()
-            
+            db_contract = (
+                ContractModel.select()
+                .where(ContractModel.id == db_event.contract_id)
+                .first()
+            )
+
             contract = to_contract(db_contract)
 
-            db_user = UserModel.select().where(UserModel.id==db_event.support_contact_id).first()
+            db_user = (
+                UserModel.select()
+                .where(UserModel.id == db_event.support_contact_id)
+                .first()
+            )
             user_contact = to_user(db_user)
 
             event = to_event(db_event, contract, user_contact)
             events.append(event)
-        
+
         return events
-    
-    def filter_event_with_or_without_contact(self, assigned_support_contact:bool) -> list:
+
+    def filter_event_with_or_without_contact(
+        self, assigned_support_contact: bool
+    ) -> list:
         if assigned_support_contact is False:
             query = EventModel.select().where(EventModel.support_contact_id == None)
-        else: 
+        else:
             query = EventModel.select().where(EventModel.support_contact_id != None)
-        
+
         events = []
 
         for db_event in query:
-            db_contract = ContractModel.select().where(ContractModel.id == db_event.contract_id).first()
-            db_sale_contact_contract = UserModel.select().where(UserModel.id == db_contract.sale_contact_id).first()
+            db_contract = (
+                ContractModel.select()
+                .where(ContractModel.id == db_event.contract_id)
+                .first()
+            )
+            db_sale_contact_contract = (
+                UserModel.select()
+                .where(UserModel.id == db_contract.sale_contact_id)
+                .first()
+            )
             sale_contact_contract = to_user(db_sale_contact_contract)
             contract = to_contract(db_contract, sale_contact_contract)
 
-            db_support_contact = UserModel.select().where(UserModel.id == db_event.support_contact_id).first()
+            db_support_contact = (
+                UserModel.select()
+                .where(UserModel.id == db_event.support_contact_id)
+                .first()
+            )
             support_contact = to_user(db_support_contact)
             event = to_event(db_event, contract, support_contact)
             events.append(event)
 
         return events
-
 
     def delete_event(self, event_id: int) -> bool:
         try:
@@ -255,11 +306,17 @@ class PeeweeEventRepository(EventRepository):
         db_event.support_contact = support_contact
         db_event.save()
 
-        db_support_user_event = UserModel.select().where(UserModel.id == support_contact).first()
-        user_support_contact_event= to_user(db_support_user_event)
+        db_support_user_event = (
+            UserModel.select().where(UserModel.id == support_contact).first()
+        )
+        user_support_contact_event = to_user(db_support_user_event)
 
-        db_contract = ContractModel.select().where(ContractModel.id == db_event.contract).first()
-        db_sale_contact_contract = UserModel.select().where(UserModel.id == db_contract.sale_contact).first()
+        db_contract = (
+            ContractModel.select().where(ContractModel.id == db_event.contract).first()
+        )
+        db_sale_contact_contract = (
+            UserModel.select().where(UserModel.id == db_contract.sale_contact).first()
+        )
 
         sale_contact_contract = to_user(db_sale_contact_contract)
         contract = to_contract(db_contract, sale_contact_contract)
@@ -271,19 +328,26 @@ class PeeweeEventRepository(EventRepository):
 
     def get_event_by_id(self, event_id) -> object:
         db_event = EventModel.select().where(EventModel.id == event_id).first()
-  
-        db_contract = ContractModel.select().where(ContractModel.id == db_event.contract).first()
-        db_sale_contact = UserModel.select().where(UserModel.id == db_contract.sale_contact).first()
+
+        db_contract = (
+            ContractModel.select().where(ContractModel.id == db_event.contract).first()
+        )
+        db_sale_contact = (
+            UserModel.select().where(UserModel.id == db_contract.sale_contact).first()
+        )
 
         sale_contact = to_user(db_sale_contact)
         contract = to_contract(db_contract, sale_contact)
 
-        db_support_contact = UserModel.select().where(UserModel.id == db_event.support_contact).first()
+        db_support_contact = (
+            UserModel.select().where(UserModel.id == db_event.support_contact).first()
+        )
         support_contact = to_user(db_support_contact)
         print(f"DEBUG: {support_contact}")
 
         return to_event(db_event, contract, support_contact)
-   
+
+
 class PeeweeCustomerRepository(CustomerRepository):
     def __init__(self, db: Database):
         self.db = db
@@ -337,10 +401,15 @@ class PeeweeCustomerRepository(CustomerRepository):
             pass
 
     def get_customer_by_id(self, customer_id) -> object:
-        customer_db = CustomerModel.select().where(CustomerModel.id == customer_id).first()
+        customer_db = (
+            CustomerModel.select().where(CustomerModel.id == customer_id).first()
+        )
 
-        db_sale_contact = UserModel.select().where(UserModel.id == customer_db.sale_contact_id).first()
+        db_sale_contact = (
+            UserModel.select()
+            .where(UserModel.id == customer_db.sale_contact_id)
+            .first()
+        )
         sale_contact = to_user(db_sale_contact)
         print(f"DEBUG: {sale_contact}")
-        return  to_customer(customer_db, sale_contact)
-   
+        return to_customer(customer_db, sale_contact)

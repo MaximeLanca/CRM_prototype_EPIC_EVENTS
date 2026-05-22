@@ -35,7 +35,7 @@ class EventService:
     @require_permission("update_event")
     def update_event(
         self,
-        event_id:int,
+        event_id: int,
         contract_to_change: int,
         date_start_to_change: datetime,
         date_end_to_change: datetime,
@@ -59,7 +59,7 @@ class EventService:
     def filter_my_events(self) -> list:
         session = SessionService()
         payload, _ = session.get_payload()
-        user_id = int(payload["sub"]) if payload else None 
+        user_id = int(payload["sub"]) if payload else None
         return self.repository.filter_my_events(user_id)
 
     @require_permission("delete_event")
@@ -74,5 +74,9 @@ class EventService:
         return self.repository.get_event_by_id(event_id)
 
     @require_permission("filter_event_by_contact")
-    def filter_event_with_or_without_contact(self, assigned_support_contact:bool) -> list:
-        return self.repository.filter_event_with_or_without_contact(assigned_support_contact)
+    def filter_event_with_or_without_contact(
+        self, assigned_support_contact: bool
+    ) -> list:
+        return self.repository.filter_event_with_or_without_contact(
+            assigned_support_contact
+        )

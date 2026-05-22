@@ -29,25 +29,21 @@ from contextlib import suppress
 import peewee as pw
 from peewee_migrate import Migrator
 
-
 with suppress(ImportError):
     import playhouse.postgres_ext as pw_pext
 
 
 def migrate(migrator, database, **kwargs):
+    database.execute_sql("ALTER TABLE event DROP CONSTRAINT event_contract_id_fkey;")
     database.execute_sql(
-        'ALTER TABLE event DROP CONSTRAINT event_contract_id_fkey;'
-    )
-    database.execute_sql(
-        'ALTER TABLE event ADD CONSTRAINT event_contract_id_fkey '
-        'FOREIGN KEY (contract_id) REFERENCES contract(id) ON DELETE CASCADE;'
+        "ALTER TABLE event ADD CONSTRAINT event_contract_id_fkey "
+        "FOREIGN KEY (contract_id) REFERENCES contract(id) ON DELETE CASCADE;"
     )
 
+
 def rollback(migrator, database, **kwargs):
+    database.execute_sql("ALTER TABLE event DROP CONSTRAINT event_contract_id_fkey;")
     database.execute_sql(
-        'ALTER TABLE event DROP CONSTRAINT event_contract_id_fkey;'
-    )
-    database.execute_sql(
-        'ALTER TABLE event ADD CONSTRAINT event_contract_id_fkey '
-        'FOREIGN KEY (contract_id) REFERENCES contract(id);'
+        "ALTER TABLE event ADD CONSTRAINT event_contract_id_fkey "
+        "FOREIGN KEY (contract_id) REFERENCES contract(id);"
     )
